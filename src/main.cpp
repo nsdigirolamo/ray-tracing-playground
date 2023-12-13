@@ -1,17 +1,13 @@
-#include "matrix.hpp"
+#include "vector.hpp"
 #include <iostream>
 
 using namespace std;
 
 int main () {
 
-    double my_array[3][3] = {
-        {1.0, 2.0, 3.0},
-        {4.0, 5.0, 6.0},
-        {7.0, 8.0, 9.0}
-    };
+    double my_vector[3] = { 3.1, 2.2, 1.3 };
 
-    Matrix<3, 3> my_matrix {my_array};
+    Vector<3> v1 {my_vector};
 
-    cout << my_matrix;
+    cout << v1 << "\n";
 }
