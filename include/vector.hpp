@@ -6,7 +6,11 @@
 
 using namespace std;
 
-template <unsigned int length> requires (0 < length)
+template <unsigned int length>
+concept Nonzero = 0 < length;
+
+template <unsigned int length>
+requires Nonzero<length>
 class Vector {
 
     private:
