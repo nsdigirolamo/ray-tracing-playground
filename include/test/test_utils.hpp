@@ -8,10 +8,10 @@
 template <unsigned int height, unsigned int width>
 bool printTest(const char* test_name, bool is_success, Matrix<height, width> result) {
     if (is_success) {
-        cout << test_name << " completed successfully.\n";
+        cout << "COMPLETED: " << test_name << "\n";
         return true;
     } else {
-        cout << test_name << " failed with resulting matrix:\n" << result << "\n";
+        cout << "FAILED: " << test_name << "\n" << result << "\n";
         return false;
     }
 }
