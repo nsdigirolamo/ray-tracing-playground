@@ -70,7 +70,7 @@ bool testSumManyFloatingPoints () {
     return printTest("testSumManyFloatingPoints", isApprox(m4, m3, EPSILON), m4);
 }
 
-void doSumTests () {
+void doMatrixSumTests () {
 
     testSumBasic();
     testSumSingleFloatingPoints();
