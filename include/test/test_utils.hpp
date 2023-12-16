@@ -16,4 +16,6 @@ bool printTest(const char* test_name, bool is_success, Matrix<height, width> res
     }
 }
 
+bool floatApprox (const double a, const double b, const double epsilon);
+
 #endif
