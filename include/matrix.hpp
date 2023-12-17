@@ -11,7 +11,7 @@ template <unsigned int height, unsigned int width>
 requires (0 < height && 0 < width)
 class Matrix {
 
-    private:
+    protected:
 
     double values[height][width];
 
