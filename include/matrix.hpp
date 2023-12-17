@@ -69,7 +69,13 @@ class Matrix {
         return *this;
     }
 
-    double operator[] (const unsigned int row, const unsigned int col) const {
+    double& operator[] (const unsigned int row, const unsigned int col) {
+        assert(row < height);
+        assert(col < width);
+        return values[row][col];
+    }
+
+    const double& operator[] (const unsigned int row, const unsigned int col) const {
         assert(row < height);
         assert(col < width);
         return values[row][col];
