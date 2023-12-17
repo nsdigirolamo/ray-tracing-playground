@@ -8,7 +8,7 @@ bool defaultInit () {
     for (int r = 0; r < 3; r++) {
         for (int c = 0; c < 3; c++) {
             bool is_approx = floatApprox(matrix[r, c], 0.0, EPSILON);
-            if (!is_approx) return printTest("basicInit", false, matrix);
+            if (!is_approx) return printTest("defaultInit", false, matrix);
         }
     }
 
@@ -28,7 +28,7 @@ bool arrayInit () {
     for (int r = 0; r < 3; r++) {
         for (int c = 0; c < 3; c++) {
             bool is_approx = floatApprox(matrix[r, c], my_array[r][c], EPSILON);
-            if (!is_approx) return printTest("basicInit", false, matrix);
+            if (!is_approx) return printTest("arrayInit", false, matrix);
         }
     }
 
@@ -48,7 +48,7 @@ bool arrayInitIsDeep () {
     my_array[0][0] = 100.0;
 
     return printTest(
-        "properArrayInit",
+        "arrayInitIsDeep",
         !floatApprox(matrix[0, 0], my_array[0][0], EPSILON),
         matrix
     );
