@@ -1,8 +1,9 @@
 #include <iostream>
 
-#include "test/matrix_init.hpp"
-#include "test/matrix_mult.hpp"
-#include "test/matrix_sum.hpp"
+#include "test/matrix/matrix_init.hpp"
+#include "test/matrix/matrix_mult.hpp"
+#include "test/matrix/matrix_sum.hpp"
+#include "test/vector/vector_sum.hpp"
 
 using namespace std;
 
@@ -14,5 +15,7 @@ int main () {
     doMatrixInitTests();
     cout << "--------------------\nMatrix Mult Tests:\n--------------------\n";
     doMatrixMultTests();
+    cout << "--------------------\nVector Sum Tests:\n--------------------\n";
+    doVectorSumTests();
 
 }
