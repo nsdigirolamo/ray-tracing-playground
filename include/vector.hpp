@@ -3,15 +3,19 @@
 
 #include "matrix.hpp"
 
+using namespace std;
+
 template <unsigned int height>
 requires (0 < height)
 class Vector: public Matrix<height, 1> {
 
     public:
 
-    Vector (const double (&values)[height]) {
+    Vector (initializer_list<double> list) {
+        initializer_list<double>::iterator it = list.begin();
         for (int row = 0; row < height; row++) {
-            this->values[row][0] = values[row];
+            this->values[row][0] = *it;
+            it++;
         }
     }
 
