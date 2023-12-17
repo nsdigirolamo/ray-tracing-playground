@@ -20,7 +20,7 @@ class Matrix {
     Matrix () {
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
-                values[row][col] = 0;
+                values[row][col] = 0.0;
             }
         }
     }
