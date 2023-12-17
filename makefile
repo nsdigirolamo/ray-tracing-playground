@@ -21,6 +21,8 @@ $(ODIR)/%.o: $(TDIR)/%.cpp $(HDRS) | $(ODIR)
 
 $(ODIR):
 	mkdir -p $@
+	mkdir -p $@/vector
+	mkdir -p $@/matrix
 
 clean:
 	rm -r $(ODIR) testing
