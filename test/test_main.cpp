@@ -3,6 +3,7 @@
 #include "test/matrix/matrix_init.hpp"
 #include "test/matrix/matrix_mult.hpp"
 #include "test/matrix/matrix_sum.hpp"
+#include "test/vector/vector_init.hpp"
 #include "test/vector/vector_sum.hpp"
 
 using namespace std;
@@ -17,5 +18,7 @@ int main () {
     doMatrixMultTests();
     cout << "--------------------\nVector Sum Tests:\n--------------------\n";
     doVectorSumTests();
+    cout << "--------------------\nVector Init Tests:\n--------------------\n";
+    doVectorInitTests();
 
 }
