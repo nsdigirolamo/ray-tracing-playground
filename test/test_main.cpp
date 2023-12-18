@@ -4,6 +4,7 @@
 #include "test/matrix/matrix_mult.hpp"
 #include "test/matrix/matrix_sum.hpp"
 #include "test/vector/vector_init.hpp"
+#include "test/vector/vector_len_and_dir.hpp"
 #include "test/vector/vector_sum.hpp"
 
 using namespace std;
@@ -20,5 +21,7 @@ int main () {
     doVectorSumTests();
     cout << "--------------------\nVector Init Tests:\n--------------------\n";
     doVectorInitTests();
+    cout << "--------------------\nVector Len and Dir Tests:\n--------------------\n";
+    doVectorLenAndDirTests();
 
 }
