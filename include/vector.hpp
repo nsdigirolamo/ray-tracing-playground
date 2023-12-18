@@ -25,10 +25,18 @@ class Vector: public Matrix<height, 1> {
         }
     }
 
-    Vector (const Matrix<height, 1> &m) {
+    Vector (const Matrix<height, 1>& m) {
         for (int row = 0; row < height; row++) {
             this->values[row][0] = m[row, 0];
         }
+    }
+
+    double length () {
+        return sqrtf(dot(*this, *this));
+    }
+
+    Vector<height> direction () {
+        return *this / this->length();
     }
 
     double& operator[] (const unsigned int row) {
@@ -41,5 +49,14 @@ class Vector: public Matrix<height, 1> {
         return this->values[row][0];
     }
 };
+
+template <unsigned int height>
+double dot (const Vector<height>& lhs, const Vector<height>& rhs) {
+    double dot_product = 0.0;
+    for (int row = 0; row < height; row++) {
+        dot_product += lhs[row] * rhs[row];
+    }
+    return dot_product;
+}
 
 #endif
