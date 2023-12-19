@@ -61,10 +61,36 @@ bool testDivBasic () {
     return printTest("testDivBasic", isApprox(m2, m3, EPSILON), m2);
 }
 
+bool testHadamard () {
+
+    Matrix<3, 3> m1 { {
+        {1.0, 2.0, 3.0},
+        {4.0, 5.0, 6.0},
+        {7.0, 8.0, 9.0}
+    } };
+
+    Matrix<3, 3> m2 { {
+        {1.0, 2.0, 3.0},
+        {4.0, 5.0, 6.0},
+        {7.0, 8.0, 9.0}
+    } };
+
+    Matrix<3, 3> m3 { {
+        {1.0, 4.0, 9.0},
+        {16.0, 25.0, 36.0},
+        {49.0, 64.0, 81.0}
+    } };
+
+    Matrix<3, 3> m4 = hadamard(m1, m2);
+
+    return printTest("testHadamard", isApprox(m4, m3, EPSILON), m4);
+}
+
 void doMatrixMultTests () {
 
     testMultBasic();
     testMultReverseBasic();
     testDivBasic();
+    testHadamard();
 
 }
