@@ -110,6 +110,17 @@ Matrix<height, width> operator* (const double& lhs, const Matrix<height, width>&
     return result;
 }
 
+template<unsigned int height, unsigned int width>
+Matrix<height, width> hadamard (const Matrix<height, width>& lhs, const Matrix<height, width>& rhs) {
+    Matrix<height, width> result;
+    for (int row = 0; row < height; row++) {
+        for (int col = 0; col < width; col++) {
+            result[row, col] = lhs[row, col] * rhs[row, col];
+        }
+    }
+    return result;
+}
+
 template <unsigned int height, unsigned int width>
 Matrix<height, width> operator/ (const Matrix<height, width>& lhs, const double& rhs) {
     Matrix<height, width> result = lhs;
