@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include "color.hpp"
+#include "image.hpp"
 
 using namespace std;
 
