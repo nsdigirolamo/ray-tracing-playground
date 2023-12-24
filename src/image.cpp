@@ -1,10 +1,6 @@
 #include <array>
-#include <fstream>
-#include <iostream>
 #include "color.hpp"
 #include "image.hpp"
-
-using namespace std;
 
 void generate_test () {
 
