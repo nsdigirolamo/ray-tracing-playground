@@ -1,5 +1,11 @@
+# Configs
 .vscode
-a.out
+# Objects
 obj
 obj/*
+# Programs
+a.out
 testing
+nicks-ray-tracer
+# Images
+*.ppm
