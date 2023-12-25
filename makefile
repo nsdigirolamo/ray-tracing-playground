@@ -16,8 +16,8 @@ HDRS := $(shell find $(IDIR) -name *.hpp)
 
 .PHONY: clean
 
-nicks-ray-tracer: $(OBJS)
-	$(CXX) $(CXXFLAGS) $^ -o nicks-ray-tracer
+ray-tracer: $(OBJS)
+	$(CXX) $(CXXFLAGS) $^ -o ray-tracer
 
 $(ODIR)/%.o: $(SDIR)/%.cpp $(HDRS) | $(ODIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
@@ -32,4 +32,4 @@ $(ODIR):
 	mkdir -p $@
 
 clean:
-	rm -rf $(ODIR) a.out testing nicks-ray-tracer *.ppm
+	rm -rf $(ODIR) a.out testing ray-tracer *.ppm
