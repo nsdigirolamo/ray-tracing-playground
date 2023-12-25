@@ -1,6 +1,8 @@
 # Dotfiles
 .vscode
 *.DS_Store
+.DS_Store
+*/.DS_Store
 # Objects
 obj
 obj/*
