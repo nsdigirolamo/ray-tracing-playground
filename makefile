@@ -6,15 +6,15 @@ ODIR := obj
 CXX := g++
 CXXFLAGS := -std=c++2b -I $(IDIR)
 
-SRCS := $(shell find $(SDIR) -name *.cpp)
+SRCS := $(shell find $(SDIR) -name '*.cpp')
 OBJS := $(SRCS:$(SDIR)/%.cpp=$(ODIR)/%.o)
 
-TSRCS := $(shell find $(TDIR) -name *.cpp)
+TSRCS := $(shell find $(TDIR) -name '*.cpp')
 TOBJS := $(TSRCS:$(TDIR)/%.cpp=$(ODIR)/%.o)
 
 HDRS := $(shell find $(IDIR) -name *.hpp)
 
-.PHONY: clean make
+.PHONY: clean
 
 nicks-ray-tracer: $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o nicks-ray-tracer
