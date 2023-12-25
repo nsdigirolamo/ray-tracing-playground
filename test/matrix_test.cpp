@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
 
-#include "lib/catch.hpp"
+#include "lib/catch2/catch.hpp"
 #include "matrix.hpp"
 #include "test/test_utils.hpp"
 
