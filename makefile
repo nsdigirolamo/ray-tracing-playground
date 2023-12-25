@@ -34,4 +34,4 @@ $(ODIR):
 	mkdir -p $@/matrix
 
 clean:
-	rm -r $(ODIR) testing nicks-ray-tracer *.ppm
+	rm -rf $(ODIR) a.out testing nicks-ray-tracer *.ppm
