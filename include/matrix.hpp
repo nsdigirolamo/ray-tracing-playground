@@ -132,14 +132,14 @@ template <unsigned int height, unsigned int width>
 bool operator== (const Matrix<height, width>& lhs, const Matrix<height, width>& rhs) {
     for (int row = 0; row < height; row++) {
         for (int col = 0; col < width; col++) {
-            if (lhs[row, col] == rhs[row, col]) return false;
+            if (lhs[row, col] != rhs[row, col]) return false;
         }
     }
     return true;
 }
 
 template <unsigned int height, unsigned int width>
-bool isApprox (const Matrix<height, width>& lhs, const Matrix<height, width>& rhs, const double epsilon) {
+bool isApprox (const Matrix<height, width>& lhs, const Matrix<height, width>& rhs, const double epsilon = 0.001) {
     for (int row = 0; row < height; row++) {
         for (int col = 0; col < width; col++) {
             if (epsilon < fabs(lhs[row, col] - rhs[row, col])) return false;
@@ -160,14 +160,14 @@ ostream& operator<< (ostream& output, const Matrix<height, width>& m) {
     for (int col = 0; col < width; col++) {
         output << m[0, col] << " ";
     }
-    output << "]\n";
+    output << "]";
 
     for (int row = 1; row < height; row++) {
-        output << "[ ";
+        output << "\n[ ";
         for (int col = 0; col < width; col++) {
             output << m[row, col] << " ";
         }
-        output << "]\n";
+        output << "]";
     }
     return output;
 }
