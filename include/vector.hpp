@@ -17,11 +17,9 @@ class Vector: public Matrix<height, 1> {
         }
     }
 
-    Vector (initializer_list<double> list) {
-        initializer_list<double>::iterator it = list.begin();
+    Vector (const double (&values)[height]) {
         for (int row = 0; row < height; row++) {
-            this->values[row][0] = *it;
-            it++;
+            this->values[row][0] = values[row];
         }
     }
 
