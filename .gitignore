@@ -9,6 +9,6 @@ obj/*
 # Programs
 a.out
 testing
-nicks-ray-tracer
+ray-tracer
 # Images
 *.ppm
