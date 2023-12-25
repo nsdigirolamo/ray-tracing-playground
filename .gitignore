@@ -1,5 +1,6 @@
-# Configs
+# Dotfiles
 .vscode
+*.DS_Store
 # Objects
 obj
 obj/*
