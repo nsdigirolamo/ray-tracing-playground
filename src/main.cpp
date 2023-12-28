@@ -1,8 +1,7 @@
 #include "color.hpp"
-#include "point.hpp"
-#include "ray.hpp"
-#include "sphere.hpp"
 #include "image.hpp"
+#include "point.hpp"
+#include "sphere.hpp"
 
 int main () {
 
