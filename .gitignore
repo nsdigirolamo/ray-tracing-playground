@@ -12,3 +12,6 @@ testing
 ray-tracer
 # Images
 *.ppm
+# Debugging
+valgrind-out.*
+vgcore.*
