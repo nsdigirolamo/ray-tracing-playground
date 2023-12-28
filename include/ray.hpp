@@ -2,6 +2,7 @@
 #define RAY_HPP
 
 #include "point.hpp"
+#include "vector.hpp"
 
 class Ray {
 
@@ -10,10 +11,7 @@ class Ray {
     Point origin;
     Vector<3> direction;
 
-    Ray (const Point& origin, const Vector<3>& direction) {
-        this->origin = origin;
-        this->direction = unit(direction);
-    }
+    Ray (const Point& origin, const Vector<3>& direction);
 };
 
 #endif
