@@ -1,5 +1,3 @@
-#include <vector>
-#include "color.hpp"
 #include "image.hpp"
 
 void generate_test () {

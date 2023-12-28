@@ -2,9 +2,11 @@
 #define IMAGE_HPP
 
 #include <fstream>
-#include "color.hpp"
 
-template<size_t width, size_t height>
+#include "color.hpp"
+#include "vector.hpp"
+
+template<int width, int height>
 void generate_ppm (Color (&pixels)[height][width], const std::string file_name) {
 
     std::ofstream file(file_name + ".ppm");
