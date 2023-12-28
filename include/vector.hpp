@@ -3,8 +3,6 @@
 
 #include "matrix.hpp"
 
-using namespace std;
-
 template <unsigned int height>
 requires (0 < height)
 class Vector: public Matrix<height, 1> {
@@ -29,14 +27,6 @@ class Vector: public Matrix<height, 1> {
         }
     }
 
-    double length () {
-        return sqrtf(dot(*this, *this));
-    }
-
-    Vector<height> direction () {
-        return *this / this->length();
-    }
-
     double& operator[] (const unsigned int row) {
         assert(row < height);
         return this->values[row][0];
@@ -55,6 +45,16 @@ double dot (const Vector<height>& lhs, const Vector<height>& rhs) {
         dot_product += lhs[row] * rhs[row];
     }
     return dot_product;
+}
+
+template <unsigned int height>
+double length (Vector<height> v) {
+    return sqrtf(dot(v, v));
+}
+
+template <unsigned int height>
+Vector<height> unit (const Vector<height>& v) {
+    return v / length(v);
 }
 
 #endif
