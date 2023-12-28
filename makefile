@@ -32,4 +32,4 @@ $(ODIR):
 	mkdir -p $@
 
 clean:
-	rm -rf $(ODIR) a.out testing ray-tracer *.ppm
+	rm -rf $(ODIR) a.out testing ray-tracer *.ppm valgrind-out.* vgcore.*
