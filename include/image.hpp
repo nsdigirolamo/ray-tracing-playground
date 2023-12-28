@@ -4,12 +4,10 @@
 #include <fstream>
 #include "color.hpp"
 
-using namespace std;
-
 template<size_t width, size_t height>
-void generate_ppm (const array<array<Color, width>, height> pixels, const string file_name) {
+void generate_ppm (Color (&pixels)[height][width], const std::string file_name) {
 
-    ofstream file(file_name + ".ppm");
+    std::ofstream file(file_name + ".ppm");
     file << "P3\n" << width << " " << height << "\n" << "255\n";
 
     for (int row = 0; row < height; row++) {
