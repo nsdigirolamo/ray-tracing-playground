@@ -1,5 +1,3 @@
-#define CATCH_CONFIG_MAIN
-
 #include "lib/catch2/catch.hpp"
 #include "matrix.hpp"
 #include "test/test_utils.hpp"
@@ -469,7 +467,7 @@ TEST_CASE ("matrices compare properly") {
                 }
             }
         } AND_GIVEN ("two matrices with almost matching values") {
-            
+
             Matrix<3, 3> m1 = {{
                 {1.00001, 2.00001, 3.00001},
                 {4.00001, 5.00001, 6.00001},
