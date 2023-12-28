@@ -16,7 +16,7 @@ TEST_CASE ("vector initializers initialize properly") {
                         CHECK(vector[row] == 0.0);
                     }
                 }
-            } 
+            }
         }
     }
 
@@ -82,7 +82,7 @@ TEST_CASE ("length of vector") {
 
             WHEN ("the length function is used") {
 
-                double result = vector.length();
+                double result = length(vector);
 
                 THEN ("the length is calculated") {
 
@@ -97,7 +97,7 @@ TEST_CASE ("length of vector") {
 
             WHEN ("the length function is used") {
 
-                double result = unit_vector.length();
+                double result = length(unit_vector);
 
                 THEN ("the length is calculated as one") {
 
@@ -117,9 +117,9 @@ TEST_CASE ("direction of vector") {
 
             Vector<3> vector = {{1, 2, 3}};
 
-            WHEN ("the direction function is used") {
+            WHEN ("the unit function is used") {
 
-                Vector<3> result = vector.direction();
+                Vector<3> result = unit(vector);
 
                 THEN ("the length is calculated") {
 
@@ -132,9 +132,9 @@ TEST_CASE ("direction of vector") {
 
             Vector<3> unit_vector = {{1, 0, 0}};
 
-            WHEN ("the direction function is used") {
+            WHEN ("the unit function is used") {
 
-                Vector<3> result = unit_vector.direction();
+                Vector<3> result = unit(unit_vector);
 
                 THEN ("the direction is equal to the unit vector") {
 
