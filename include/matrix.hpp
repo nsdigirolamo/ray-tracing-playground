@@ -5,8 +5,6 @@
 #include <cmath>
 #include <iostream>
 
-using namespace std;
-
 template <unsigned int height, unsigned int width>
 requires (0 < height && 0 < width)
 class Matrix {
@@ -154,7 +152,7 @@ bool operator!= (const Matrix<height, width>& lhs, const Matrix<height, width>& 
 }
 
 template <unsigned int height, unsigned int width>
-ostream& operator<< (ostream& output, const Matrix<height, width>& m) {
+std::ostream& operator<< (std::ostream& output, const Matrix<height, width>& m) {
 
     output << "[ ";
     for (int col = 0; col < width; col++) {
