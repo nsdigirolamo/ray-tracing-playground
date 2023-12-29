@@ -4,7 +4,7 @@ IDIR := include
 ODIR := obj
 
 CXX := g++
-CXXFLAGS := -std=c++2b -I $(IDIR)
+CXXFLAGS := -std=c++23 -I $(IDIR)
 
 SRCS := $(shell find $(SDIR) -name '*.cpp')
 OBJS := $(SRCS:$(SDIR)/%.cpp=$(ODIR)/%.o)
