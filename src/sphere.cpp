@@ -5,7 +5,7 @@ Sphere::Sphere (const Point& center, double radius) {
     this->radius = radius;
 }
 
-bool Sphere::intersects(const Ray& ray) {
+bool Sphere::intersects(const Ray& ray) const {
 
     // https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection#Calculation_using_vectors_in_3D
 

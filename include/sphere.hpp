@@ -12,7 +12,7 @@ class Sphere {
     double radius;
 
     Sphere (const Point& center, double radius);
-    bool intersects(const Ray& ray);
+    bool intersects(const Ray& ray) const;
 };
 
 #endif
