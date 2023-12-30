@@ -488,3 +488,126 @@ TEST_CASE ("matrices compare properly") {
         }
     }
 }
+
+TEST_CASE ("matrices transform properly") {
+
+    SECTION ("stretch") {
+        GIVEN ("a stretch transformation matrix and a vector to be stretched") {
+
+            Matrix<2, 2> stretch = {{
+                {2, 0},
+                {0, 2}
+            }};
+
+            Matrix<2, 1> m1 = {{
+                {2},
+                {3}
+            }};
+
+            WHEN ("the transform function is used") {
+
+                Matrix<2, 1> result = stretch.transform(m1);
+
+                THEN ("the result is the original matrix stretched by two") {
+
+                    Matrix<2, 1> stretched = {{
+                        {4},
+                        {6}
+                    }};
+
+                    compare_matrix(result, stretched);
+                }
+            }
+        }
+    }
+
+    SECTION ("rotation") {
+        GIVEN ("a 90 degree rotation matrix and a vector to be rotated") {
+
+            Matrix<2, 2> rotate = {{
+                {0, -1},
+                {1, 0}
+            }};
+
+            Matrix<2, 1> m1 = {{
+                {1.0},
+                {1.0}
+            }};
+
+            WHEN ("the transform function is used") {
+
+                Matrix<2, 1> result = rotate.transform(m1);
+
+                THEN ("the result is the original matrix rotated by 90 degrees") {
+
+                    Matrix<2, 1> rotated = {{
+                        {-1.0},
+                        {1.0}
+                    }};
+
+                    compare_matrix(result, rotated);
+                }
+            }
+        }
+    }
+
+    SECTION ("reflection across x = y line") {
+        GIVEN ("a reflection matrix and a vector to be reflected") {
+
+            Matrix<2, 2> reflect = {{
+                {0, 1},
+                {1, 0}
+            }};
+
+            Matrix<2, 1> m1 = {{
+                {0.0},
+                {1.0}
+            }};
+
+            WHEN ("the transform function is used") {
+
+                Matrix<2, 1> result = reflect.transform(m1);
+
+                THEN ("the result is the original matrix reflected across the x = y line") {
+
+                    Matrix<2, 1> reflected = {{
+                        {1.0},
+                        {0.0}
+                    }};
+
+                    compare_matrix(result, reflected);
+                }
+            }
+        }
+    }
+
+    SECTION ("projection") {
+        GIVEN ("a projection matrix and a vector to be projected") {
+
+            Matrix<2, 2> project = {{
+                {1, 0},
+                {0, 0}
+            }};
+
+            Matrix<2, 1> m1 = {{
+                {10.0},
+                {32.0}
+            }};
+
+            WHEN ("the transform function is used") {
+
+                Matrix<2, 1> result = project.transform(m1);
+
+                THEN ("the result is the original matrix projected onto the x axis") {
+
+                    Matrix<2, 1> projected = {{
+                        {10.0},
+                        {0.0}
+                    }};
+
+                    compare_matrix(result, projected);
+                }
+            }
+        }
+    }
+}

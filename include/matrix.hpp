@@ -78,6 +78,21 @@ class Matrix {
         assert(col < width);
         return values[row][col];
     }
+
+    Matrix<height, 1> transform (const Matrix<width, 1>& vector) const {
+
+        Matrix<height, 1> result;
+
+        for (int col = 0; col < width; col++) {
+            Matrix<height, 1> column;
+            for (int row = 0; row < height; row++) {
+                column[row, 0] = this->values[row][col];
+            }
+            result += vector[col, 0] * column;
+        }
+
+        return result;
+    }
 };
 
 template <unsigned int height, unsigned int width>
