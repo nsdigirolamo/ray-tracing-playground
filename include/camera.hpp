@@ -10,29 +10,31 @@ class Camera {
 
     private:
 
-    Point origin;
-    // Vector<3> direction;
+    double vertical_fov;
+    double horizontal_fov;
 
-    double focal_length;
     double view_height;
     double view_width;
-    double view_ratio;
-
-    int image_height;
-    int image_width;
-    double pixel_height_distance;
-    double pixel_width_distance;
+    double focal_length;
 
     public:
 
+    Point location;
+
+    int image_height;
+    int image_width;
+
+    Matrix<3, 3> rotation_matrix;
+
     Camera ();
+
     Camera (
-        const Point origin,
-        // const Vector<3> direction,
-        const double focal_length,
-        const double viewport_width,
-        const double viewport_height,
-        const int image_height
+        const Point location,
+        const int image_height,
+        const int image_width,
+        const double vertical_fov,
+        const double horizontal_fov,
+        const double yaw
     );
 
     void capture (const Sphere& sphere, const std::string file_name) const;
