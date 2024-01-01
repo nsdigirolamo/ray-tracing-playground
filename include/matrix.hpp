@@ -185,4 +185,13 @@ std::ostream& operator<< (std::ostream& output, const Matrix<height, width>& m) 
     return output;
 }
 
+template <unsigned int height>
+Matrix<height, height> identity (Matrix<height, height>& matrix) {
+    Matrix<height, height> identity_matrix;
+    for (int i = 0; i < height; i++) {
+        identity_matrix[i, i] = 1.0;
+    }
+    return identity_matrix;
+}
+
 #endif

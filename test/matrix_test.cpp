@@ -611,3 +611,34 @@ TEST_CASE ("matrices transform properly") {
         }
     }
 }
+
+TEST_CASE ("identity matrix") {
+
+    SECTION ("identity matrix") {
+        GIVEN ("a 3 x 3 matrix") {
+
+            Matrix<3, 3> m = {{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+            }};
+
+            WHEN ("the identity function is used") {
+
+                Matrix<3, 3> result = identity(m);
+
+                THEN ("the result is a 3 x 3 identity matrix") {
+
+                    Matrix<3, 3> identity = {{
+                        {1, 0, 0},
+                        {0, 1, 0},
+                        {0, 0, 1}
+                    }};
+
+                    compare_matrix(result, identity);
+
+                }
+            }
+        }
+    }
+}
