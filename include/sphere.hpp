@@ -1,6 +1,7 @@
 #ifndef SPHERE_HPP
 #define SPHERE_HPP
 
+#include "color.hpp"
 #include "point.hpp"
 #include "ray.hpp"
 
@@ -11,8 +12,8 @@ class Sphere {
     Point center;
     double radius;
 
-    Sphere (const Point& center, double radius);
-    bool intersects(const Ray& ray) const;
+    Sphere (const Point &center, double radius);
+    Color intersects(const Ray &ray) const;
 };
 
 #endif
