@@ -6,6 +6,45 @@ double to_radians (double degrees) {
     return degrees * M_PI / 180;
 }
 
+Camera::Camera () {
+    *this = {
+        {{0, 0, 0}},
+        1080,
+        1920,
+        90.0,
+        0.0
+    };
+}
+
+Camera::Camera (
+    const Point location,
+    const int image_height,
+    const int image_width,
+    const double horizontal_fov,
+    const double yaw
+) {
+
+    this->location = location;
+
+    this->image_height = image_height;
+    this->image_width = image_width;
+
+    this->horizontal_fov = horizontal_fov;
+
+    this->view_width = 2 * sin(to_radians(horizontal_fov / 2));
+    this->view_height = this->view_width * image_height / image_width;
+    this->focal_length = cos(to_radians(horizontal_fov / 2));
+
+    this->vertical_fov = atan((this->view_height / 2) / this->focal_length);
+
+    const double radians_yaw = to_radians(yaw);
+    this->rotation_matrix = {{
+        {       cos(radians_yaw), 0, sin(radians_yaw) },
+        {                     0, 1,         0 },
+        {-1.0 * sin(radians_yaw), 0, cos(radians_yaw) }
+    }};
+}
+
 Camera::Camera (
     const Point location,
     const int image_height,

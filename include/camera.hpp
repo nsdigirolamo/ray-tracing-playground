@@ -32,6 +32,14 @@ class Camera {
         const Point location,
         const int image_height,
         const int image_width,
+        const double horizontal_fov,
+        const double yaw
+    );
+
+    Camera (
+        const Point location,
+        const int image_height,
+        const int image_width,
         const double vertical_fov,
         const double horizontal_fov,
         const double yaw
