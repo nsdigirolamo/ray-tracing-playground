@@ -10,6 +10,9 @@ class Camera {
 
     private:
 
+    int image_height;
+    int image_width;
+  
     double vertical_fov;
     double horizontal_fov;
 
@@ -20,9 +23,6 @@ class Camera {
     public:
 
     Point location;
-
-    int image_height;
-    int image_width;
 
     Matrix<3, 3> rotation_matrix;
 
