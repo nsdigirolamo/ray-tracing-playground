@@ -17,7 +17,7 @@ Camera::Camera () {
 }
 
 Camera::Camera (
-    const Point location,
+    const Point &location,
     const int image_height,
     const int image_width,
     const double horizontal_fov,
@@ -35,6 +35,8 @@ Camera::Camera (
     this->view_height = this->view_width * image_height / image_width;
     this->focal_length = cos(to_radians(horizontal_fov / 2));
 
+    // TODO: Not getting calculated properly.
+
     this->vertical_fov = atan((this->view_height / 2) / this->focal_length);
 
     const double radians_yaw = to_radians(yaw);
@@ -46,7 +48,7 @@ Camera::Camera (
 }
 
 Camera::Camera (
-    const Point location,
+    const Point &location,
     const int image_height,
     const int image_width,
     const double vertical_fov,
@@ -74,7 +76,7 @@ Camera::Camera (
     }};
 }
 
-void Camera::capture (const Sphere& sphere, const std::string file_name) const {
+void Camera::capture (const Sphere &sphere, const std::string file_name) const {
 
     Color* pixels = new Color[this->image_width * this->image_height];
 
@@ -94,11 +96,7 @@ void Camera::capture (const Sphere& sphere, const std::string file_name) const {
 
             const Ray ray = {this->location, ray_direction};
 
-            if (sphere.intersects(ray)) {
-                pixels[(row * this->image_width) + col] = {{255, 0, 0}};
-            } else {
-                pixels[(row * this->image_width) + col] = {{0, 0, 0}};
-            }
+            pixels[(row * this->image_width) + col] = sphere.intersects(ray);
         }
     }
 

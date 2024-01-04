@@ -29,7 +29,7 @@ class Camera {
     Camera ();
 
     Camera (
-        const Point location,
+        const Point &location,
         const int image_height,
         const int image_width,
         const double horizontal_fov,
@@ -37,7 +37,7 @@ class Camera {
     );
 
     Camera (
-        const Point location,
+        const Point &location,
         const int image_height,
         const int image_width,
         const double vertical_fov,
@@ -45,7 +45,7 @@ class Camera {
         const double yaw
     );
 
-    void capture (const Sphere& sphere, const std::string file_name) const;
+    void capture (const Sphere &sphere, const std::string file_name) const;
 };
 
 #endif
