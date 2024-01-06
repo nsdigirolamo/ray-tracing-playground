@@ -5,7 +5,7 @@ Sphere::Sphere (const Point& center, double radius) {
     this->radius = radius;
 }
 
-Color Sphere::intersects(const Ray& ray) const {
+std::optional<Hit> Sphere::intersects(const Ray& ray) const {
 
     // https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection#Calculation_using_vectors_in_3D
 
@@ -15,8 +15,36 @@ Color Sphere::intersects(const Ray& ray) const {
     double discriminant = pow(dot(ud, oc), 2) - (dot(oc, oc) - pow(this->radius, 2));
 
     if (0 <= discriminant) {
-        return {{255, 0, 0}};
-    } else {
-        return {{0, 0, 0}};
+
+        double uoc = -1 * dot(ray.direction, (Vector<3>)(ray.origin - this->center));
+        double distance = uoc + sqrt(discriminant);
+
+        if (uoc - sqrt(discriminant) < distance) {
+            distance = uoc - sqrt(discriminant);
+        }
+
+        Point location = ray.direction * distance + ray.origin;
+
+        Ray normal = {
+            location,
+            location - this->center
+        };
+
+        Color color {{
+            255 * ((normal.direction[0] + 1) / 2),
+            255 * ((normal.direction[1] + 1) / 2),
+            255 * ((normal.direction[2] + 1) / 2)
+        }};
+
+        Hit hit = {
+            location,
+            normal,
+            color
+        };
+
+        return hit;
+
     }
+
+    return {};
 }

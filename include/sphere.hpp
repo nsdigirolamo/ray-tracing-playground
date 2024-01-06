@@ -1,7 +1,9 @@
 #ifndef SPHERE_HPP
 #define SPHERE_HPP
 
-#include "color.hpp"
+#include <optional>
+
+#include "hit.hpp"
 #include "point.hpp"
 #include "ray.hpp"
 
@@ -13,7 +15,7 @@ class Sphere {
     double radius;
 
     Sphere (const Point &center, double radius);
-    Color intersects(const Ray &ray) const;
+    std::optional<Hit> intersects(const Ray &ray) const;
 };
 
 #endif
