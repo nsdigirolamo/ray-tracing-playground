@@ -6,6 +6,10 @@ double to_radians (double degrees) {
     return degrees * M_PI / 180;
 }
 
+double to_degrees (double radians) {
+    return radians * 180 / M_PI;
+}
+
 Camera::Camera () {
     *this = {
         {{0, 0, 0}},
@@ -31,18 +35,20 @@ Camera::Camera (
 
     this->horizontal_fov = horizontal_fov;
 
-    this->view_width = 2 * sin(to_radians(horizontal_fov / 2));
+    double hfov = to_radians(horizontal_fov);
+
+    this->view_width = 2 * sin(hfov / 2);
     this->view_height = this->view_width * image_height / image_width;
-    this->focal_length = cos(to_radians(horizontal_fov / 2));
+    this->focal_length = cos(hfov / 2);
 
-    // TODO: Not getting calculated properly.
+    double vfov = atan((this->view_height / 2) / this->focal_length);
 
-    this->vertical_fov = atan((this->view_height / 2) / this->focal_length);
+    this->vertical_fov = to_degrees(vfov);
 
     const double radians_yaw = to_radians(yaw);
     this->rotation_matrix = {{
         {       cos(radians_yaw), 0, sin(radians_yaw) },
-        {                     0, 1,         0 },
+        {                     0,  1,                0 },
         {-1.0 * sin(radians_yaw), 0, cos(radians_yaw) }
     }};
 }
@@ -64,9 +70,12 @@ Camera::Camera (
     this->vertical_fov = vertical_fov;
     this->horizontal_fov = horizontal_fov;
 
-    this->view_height = 2 * sin(to_radians(vertical_fov / 2));
-    this->focal_length = cos(to_radians(vertical_fov / 2));
-    this->view_width = 2 * this->focal_length * tan(to_radians(horizontal_fov / 2));
+    double hfov = to_radians(horizontal_fov);
+    double vfov = to_radians(vertical_fov);
+
+    this->view_height = 2 * sin(vfov / 2);
+    this->focal_length = cos(vfov / 2);
+    this->view_width = 2 * this->focal_length * tan(hfov / 2);
 
     const double radians_yaw = to_radians(yaw);
     this->rotation_matrix = {{
@@ -96,7 +105,13 @@ void Camera::capture (const Sphere &sphere, const std::string file_name) const {
 
             const Ray ray = {this->location, ray_direction};
 
-            pixels[(row * this->image_width) + col] = sphere.intersects(ray);
+            std::optional<Hit> hit = sphere.intersects(ray);
+
+            if (hit) {
+                pixels[(row * this->image_width) + col] = hit.value().color;
+            } else {
+                pixels[(row * this->image_width) + col] = {{0, 0, 0}};
+            }
         }
     }
 
@@ -115,7 +130,7 @@ void Camera::capture (const Sphere &sphere, const std::string file_name) const {
     for (int row = 0; row < this->image_height; row++) {
         for (int col = 0; col < this->image_width; col++) {
             Color pixel = pixels[(row * this->image_width) + col];
-            file << pixel[0] << " " << pixel[1] << " " << pixel[2] << "\n";
+            file << (int)(pixel[0]) << " " << (int)(pixel[1]) << " " << (int)(pixel[2]) << "\n";
         }
         std::cout << this->image_height - row << " lines remaining...\n";
     }

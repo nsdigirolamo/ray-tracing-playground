@@ -10,9 +10,11 @@ class Camera {
 
     private:
 
+    // image dimensions in pixels
     int image_height;
     int image_width;
-  
+
+    // fov in degrees
     double vertical_fov;
     double horizontal_fov;
 
