@@ -2,7 +2,9 @@
 #define TEST_UTILS_HPP
 
 #include "lib/catch2/catch.hpp"
+#include "hit.hpp"
 #include "matrix.hpp"
+#include "ray.hpp"
 
 template <unsigned int height, unsigned int width>
 void compare_matrix (const Matrix<height, width>& lhs, const Matrix<height, width>& rhs) {
@@ -12,5 +14,8 @@ void compare_matrix (const Matrix<height, width>& lhs, const Matrix<height, widt
         }
     }
 }
+
+void compare_ray (const Ray& lhs, const Ray& rhs);
+void compare_hit (const Hit& lhs, const Hit& rhs);
 
 #endif
