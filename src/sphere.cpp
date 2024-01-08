@@ -17,11 +17,9 @@ std::optional<Hit> Sphere::intersects(const Ray& ray) const {
     if (0 <= discriminant) {
 
         double uoc = -1 * dot(ray.direction, (Vector<3>)(ray.origin - this->center));
-        double distance = uoc + sqrt(discriminant);
+        double distance = uoc - sqrt(discriminant);
 
-        if (uoc - sqrt(discriminant) < distance) {
-            distance = uoc - sqrt(discriminant);
-        }
+        if (distance < 0) { return {}; }
 
         Point location = ray.direction * distance + ray.origin;
 
