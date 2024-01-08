@@ -1,88 +1,152 @@
 #include "lib/catch2/catch.hpp"
+#include "hit.hpp"
 #include "sphere.hpp"
 #include "test/test_utils.hpp"
+
+/**
+ * This file does not test for a hit's color (yet)
+ */
 
 TEST_CASE ("sphere intersection detects hits and misses") {
 
     SECTION ("two intersections") {
-        GIVEN ("a ray directly intersects a sphere") {
+
+        Ray ray = {
+            {{0, 0, 0}},
+            {{0, 0, 1}}
+        };
+
+        GIVEN ("a ray directed towards a sphere") {
 
             Sphere sphere = {
-                {{0, 0, 0}},
+                {{0, 0, 10.0}},
                 1.0
             };
 
-            Ray ray = {
-                {{0, 0, 10}},
-                {{0, 0, 1}}
-            };
+            WHEN ("the intersect function is called") {
 
-            WHEN ("the intersection occurs") {
-                THEN ("the intersect function returns true") {
+                std::optional<Hit> result = sphere.intersects(ray);
 
-                    CHECK(sphere.intersects(ray));
+                THEN ("the intersect function returns a hit") {
+
+                    REQUIRE(result);
+
+                } AND_THEN("the hit occurs at the closest location with the correct normal") {
+
+                    Hit hit = {
+                        {{0, 0, 9}},
+                        {
+                            {{0, 0, 9}},
+                            {{0, 0, -1}}
+                        },
+                        {{0, 0, 0}}
+                    };
+
+                    compare_matrix(result.value().location, hit.location);
+                    compare_ray(result.value().normal, hit.normal);
                 }
             }
-        } AND_GIVEN ("a ray indirectly intersects a sphere") {
+
+        } AND_GIVEN("a ray directed away from a sphere") {
 
             Sphere sphere = {
-                {{0, 0, 0}},
+                {{0, 0, -10.0}},
                 1.0
             };
 
-            Ray ray = {
-                {{0, 0, 1.1}},
-                {{1, 1, 1}}
-            };
+            WHEN ("the intersect function is called") {
 
-            WHEN ("the intersection occurs") {
-                THEN ("the intersect function returns true") {
+                std::optional<Hit> result = sphere.intersects(ray);
 
-                    CHECK(sphere.intersects(ray));
+                THEN("the hit does not exist") {
+
+                    CHECK_FALSE(result);
+
                 }
             }
         }
     }
 
     SECTION ("one intersection") {
-        GIVEN ("a ray intersects with a sphere tangentally") {
+
+        Ray ray = {
+            {{0, 0, 0}},
+            {{0, 0, 1}}
+        };
+
+        GIVEN ("a ray directed towards a sphere") {
 
             Sphere sphere = {
-                {{0, 0, 0}},
+                {{1.0, 0, 10.0}},
                 1.0
             };
 
-            Ray ray = {
-                {{1, 0, 10}},
-                {{0, 0, 1}}
+            WHEN ("the intersect function is called") {
+
+                std::optional<Hit> result = sphere.intersects(ray);
+
+                THEN ("the intersect function returns a hit") {
+
+                    REQUIRE(result);
+
+                } AND_THEN("the hit occurs at the location with the correct normal") {
+
+                    Hit hit = {
+                        {{0, 0, 10.0}},
+                        {
+                            {{0, 0, 10}},
+                            {{-1, 0, 0}}
+                        },
+                        {{0, 0, 0}}
+                    };
+
+                    REQUIRE(result);
+                    compare_matrix(result.value().location, hit.location);
+                    compare_ray(result.value().normal, hit.normal);
+                }
+            }
+        } AND_GIVEN("a ray directed away from a sphere") {
+
+            Sphere sphere = {
+                {{1.0, 0, -10.0}},
+                1.0
             };
 
-            WHEN ("the intersection occurs") {
-                THEN ("the intersect function returns true") {
+            WHEN ("the intersect function is called") {
 
-                    CHECK(sphere.intersects(ray));
+                std::optional<Hit> result = sphere.intersects(ray);
+
+                THEN("the hit does not exist") {
+
+                    CHECK_FALSE(result);
+
                 }
             }
         }
     }
 
     SECTION ("no intersection") {
-        GIVEN ("a ray does not intersect with a sphere") {
+
+        Ray ray = {
+            {{0, 0, 0}},
+            {{1, 0, 1}}
+        };
+
+        GIVEN ("a ray misdirected towards a sphere") {
 
             Sphere sphere = {
-                {{0, 0, 0}},
+                {{0, 0, 10.0}},
                 1.0
             };
 
-            Ray ray = {
-                {{10, 0, 10}},
-                {{0, 0, 1}}
-            };
+            WHEN ("the intersect function is called") {
 
-            WHEN ("the intersection occurs") {
-                THEN ("the intersect function returns false") {
+                std::optional<Hit> result = sphere.intersects(ray);
 
-                    CHECK_FALSE(sphere.intersects(ray));
+                THEN("the hit does not exist") {
+
+                    CHECK_FALSE(result);
+
                 }
             }
         }
