@@ -10,11 +10,9 @@ class Camera {
 
     private:
 
-    // image dimensions in pixels
     int image_height;
     int image_width;
 
-    // fov in degrees
     double vertical_fov;
     double horizontal_fov;
 
@@ -46,6 +44,16 @@ class Camera {
         const double horizontal_fov,
         const double yaw
     );
+
+    int getImageHeight () const;
+    int getImageWidth () const;
+
+    double getVerticalFOV () const;
+    double getHorizontalFOV () const;
+
+    double getViewHeight () const;
+    double getViewWidth () const;
+    double getFocalLength () const;
 
     void capture (const Sphere &sphere, const std::string file_name) const;
 };

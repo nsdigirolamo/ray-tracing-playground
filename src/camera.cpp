@@ -43,7 +43,7 @@ Camera::Camera (
 
     double vfov = atan((this->view_height / 2) / this->focal_length);
 
-    this->vertical_fov = to_degrees(vfov);
+    this->vertical_fov = to_degrees(vfov) * 2;
 
     const double radians_yaw = to_radians(yaw);
     this->rotation_matrix = {{
@@ -83,6 +83,34 @@ Camera::Camera (
         {                     0, 1,         0 },
         {-1.0 * sin(radians_yaw), 0, cos(radians_yaw) }
     }};
+}
+
+int Camera::getImageHeight () const {
+    return this->image_height;
+}
+
+int Camera::getImageWidth () const {
+    return this->image_width;
+}
+
+double Camera::getVerticalFOV () const {
+    return this->vertical_fov;
+}
+
+double Camera::getHorizontalFOV () const {
+    return this->horizontal_fov;
+}
+
+double Camera::getViewHeight () const {
+    return this->view_height;
+}
+
+double Camera::getViewWidth () const {
+    return this->view_width;
+}
+
+double Camera::getFocalLength () const {
+    return this->focal_length;
 }
 
 void Camera::capture (const Sphere &sphere, const std::string file_name) const {
