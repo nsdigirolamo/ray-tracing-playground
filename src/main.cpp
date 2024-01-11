@@ -1,4 +1,5 @@
 #include "camera.hpp"
+#include "sphere.hpp"
 
 int main () {
 
