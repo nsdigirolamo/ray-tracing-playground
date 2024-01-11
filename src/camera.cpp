@@ -6,6 +6,7 @@
 #include "color.hpp"
 #include "hit.hpp"
 #include "intersectable.hpp"
+#include "ray.hpp"
 #include "sphere.hpp"
 
 const Point default_location = {{0, 0, 0}};
@@ -126,8 +127,8 @@ void Camera::capture (const std::list<Intersectable*> objects, const std::string
     const double pixel_height = this->view_height / this->image_height;
     const double pixel_width = this->view_width / this->image_width;
 
-    for (int row = 0; row < this->image_height; row++) {
-        for (int col = 0; col < this->image_width; col++) {
+    for (int row = 0; row < this->image_height; ++row) {
+        for (int col = 0; col < this->image_width; ++col) {
 
             Vector<3> view_ray {{
                 (col * pixel_width) - (this->view_width / 2),
@@ -139,17 +140,22 @@ void Camera::capture (const std::list<Intersectable*> objects, const std::string
 
             const Ray ray = {this->location, ray_direction};
 
-            for (auto it = objects.begin(); it != objects.end(); it++) {
+            double closest_hit = INFINITY;
+
+            for (auto it = objects.begin(); it != objects.end(); ++it) {
 
                 std::optional<Hit> hit = (*it)->intersects(ray);
 
-                if (hit) {
-                    pixels[(row * this->image_width) + col] = hit.value().color;
-                    break;
-                } else {
-                    pixels[(row * this->image_width) + col] = {{0, 0, 0}};
-                }
+                if (hit && hit.value().distance < closest_hit) {
 
+                    pixels[(row * this->image_width) + col] = hit.value().color;
+                    closest_hit = hit.value().distance;
+
+                } else if (closest_hit == INFINITY) {
+
+                    pixels[(row * this->image_width) + col] = {{0, 0, 0}};
+
+                }
             }
         }
     }
@@ -167,7 +173,7 @@ void Camera::capture (const std::list<Intersectable*> objects, const std::string
     file << this->image_width << " " << this->image_height << "\n" << "255\n";
 
     for (int row = this->image_height - 1; 0 <= row; --row) {
-        for (int col = 0; col < this->image_width; col++) {
+        for (int col = 0; col < this->image_width; ++col) {
             Color pixel = pixels[(row * this->image_width) + col];
             file << (int)(pixel[0]) << " " << (int)(pixel[1]) << " " << (int)(pixel[2]) << "\n";
         }
