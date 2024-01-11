@@ -6,6 +6,12 @@
 #include "hit.hpp"
 #include "sphere.hpp"
 
+const Point default_location = {{0, 0, 0}};
+constexpr int default_image_height = 1080;
+constexpr int default_image_width = 1920;
+constexpr double default_horizontal_fov = 90.0;
+constexpr double default_yaw = 0.0;
+
 double to_radians (double degrees) {
     return degrees * M_PI / 180;
 }
@@ -16,11 +22,11 @@ double to_degrees (double radians) {
 
 Camera::Camera () {
     *this = {
-        {{0, 0, 0}},
-        1080,
-        1920,
-        90.0,
-        0.0
+        default_location,
+        default_image_height,
+        default_image_width,
+        default_horizontal_fov,
+        default_yaw
     };
 }
 
@@ -30,15 +36,12 @@ Camera::Camera (
     const int image_width,
     const double horizontal_fov,
     const double yaw
-) {
-
-    this->location = location;
-
-    this->image_height = image_height;
-    this->image_width = image_width;
-
-    this->horizontal_fov = horizontal_fov;
-
+)
+    : location(location)
+    , image_height(image_height)
+    , image_width(image_width) 
+    , horizontal_fov(horizontal_fov)
+{
     double hfov = to_radians(horizontal_fov);
 
     this->view_width = 2 * sin(hfov / 2);
@@ -64,16 +67,13 @@ Camera::Camera (
     const double vertical_fov,
     const double horizontal_fov,
     const double yaw
-) {
-
-    this->location = location;
-
-    this->image_height = image_height;
-    this->image_width = image_width;
-
-    this->vertical_fov = vertical_fov;
-    this->horizontal_fov = horizontal_fov;
-
+) 
+    : location(location)
+    , image_height(image_height)
+    , image_width(image_width)
+    , vertical_fov(vertical_fov)
+    , horizontal_fov(horizontal_fov) 
+{
     double hfov = to_radians(horizontal_fov);
     double vfov = to_radians(vertical_fov);
 
