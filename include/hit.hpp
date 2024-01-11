@@ -3,15 +3,18 @@
 
 #include "color.hpp"
 #include "point.hpp"
-#include "ray.hpp"
+#include "vector.hpp"
 
 class Hit {
 
     public:
 
-    Point location;
-    Ray normal;
-    Color color;
+    const Point location;
+    const Vector<3> normal;
+    const double distance;
+    const Color color;
+
+    Hit (const Point &location, const Vector<3> &normal, const double distance, const Color &color);
 };
 
 #endif

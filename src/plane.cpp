@@ -23,20 +23,16 @@ std::optional<Hit> Plane::intersects (const Ray &ray) const {
 
         Point location = ray.direction * distance + ray.origin;
 
-        Ray normal = {
-            location,
-            this->normal
-        };
-
         Color color {{
-            255 * ((normal.direction[0] + 1) / 2),
-            255 * ((normal.direction[1] + 1) / 2),
-            255 * ((normal.direction[2] + 1) / 2)
+            255 * ((this->normal[0] + 1) / 2),
+            255 * ((this->normal[1] + 1) / 2),
+            255 * ((this->normal[2] + 1) / 2)
         }};
 
         Hit hit = {
             location,
-            normal,
+            this->normal,
+            distance,
             color
         };
 

@@ -26,21 +26,17 @@ std::optional<Hit> Sphere::intersects(const Ray& ray) const {
         if (distance < 0) { return {}; }
 
         Point location = ray.direction * distance + ray.origin;
-
-        Ray normal = {
-            location,
-            location - this->center
-        };
-
+        Vector<3> normal = location - this->center;
         Color color {{
-            255 * ((normal.direction[0] + 1) / 2),
-            255 * ((normal.direction[1] + 1) / 2),
-            255 * ((normal.direction[2] + 1) / 2)
+            255 * ((normal[0] + 1) / 2),
+            255 * ((normal[1] + 1) / 2),
+            255 * ((normal[2] + 1) / 2)
         }};
 
         Hit hit = {
             location,
             normal,
+            distance,
             color
         };
 
