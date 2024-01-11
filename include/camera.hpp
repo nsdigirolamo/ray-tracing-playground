@@ -5,6 +5,7 @@
 #include "point.hpp"
 #include "vector.hpp"
 
+class Intersectable;
 class Sphere;
 
 class Camera {
@@ -56,7 +57,7 @@ class Camera {
     double getViewWidth () const;
     double getFocalLength () const;
 
-    void capture (const Sphere &sphere, const std::string file_name) const;
+    void capture (const std::list<Intersectable*> objects, const std::string file_name) const;
 };
 
 #endif

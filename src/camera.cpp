@@ -1,9 +1,11 @@
+#include <list>
 #include <optional>
 #include <fstream>
 
 #include "camera.hpp"
 #include "color.hpp"
 #include "hit.hpp"
+#include "intersectable.hpp"
 #include "sphere.hpp"
 
 const Point default_location = {{0, 0, 0}};
@@ -84,7 +86,7 @@ Camera::Camera (
     const double radians_yaw = to_radians(yaw);
     this->rotation_matrix = {{
         {       cos(radians_yaw), 0, sin(radians_yaw) },
-        {                     0, 1,         0 },
+        {                      0, 1,                0 },
         {-1.0 * sin(radians_yaw), 0, cos(radians_yaw) }
     }};
 }
@@ -117,7 +119,7 @@ double Camera::getFocalLength () const {
     return this->focal_length;
 }
 
-void Camera::capture (const Sphere &sphere, const std::string file_name) const {
+void Camera::capture (const std::list<Intersectable*> objects, const std::string file_name) const {
 
     Color* pixels = new Color[this->image_width * this->image_height];
 
@@ -137,12 +139,17 @@ void Camera::capture (const Sphere &sphere, const std::string file_name) const {
 
             const Ray ray = {this->location, ray_direction};
 
-            std::optional<Hit> hit = sphere.intersects(ray);
+            for (auto it = objects.begin(); it != objects.end(); it++) {
 
-            if (hit) {
-                pixels[(row * this->image_width) + col] = hit.value().color;
-            } else {
-                pixels[(row * this->image_width) + col] = {{0, 0, 0}};
+                std::optional<Hit> hit = (*it)->intersects(ray);
+
+                if (hit) {
+                    pixels[(row * this->image_width) + col] = hit.value().color;
+                    break;
+                } else {
+                    pixels[(row * this->image_width) + col] = {{0, 0, 0}};
+                }
+
             }
         }
     }
@@ -159,12 +166,12 @@ void Camera::capture (const Sphere &sphere, const std::string file_name) const {
 
     file << this->image_width << " " << this->image_height << "\n" << "255\n";
 
-    for (int row = 0; row < this->image_height; row++) {
+    for (int row = this->image_height - 1; 0 <= row; --row) {
         for (int col = 0; col < this->image_width; col++) {
             Color pixel = pixels[(row * this->image_width) + col];
             file << (int)(pixel[0]) << " " << (int)(pixel[1]) << " " << (int)(pixel[2]) << "\n";
         }
-        std::cout << this->image_height - row << " lines remaining...\n";
+        std::cout << row << " lines remaining...\n";
     }
 
     delete [] pixels;
