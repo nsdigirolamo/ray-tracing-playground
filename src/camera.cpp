@@ -152,8 +152,13 @@ void Camera::capture (const std::list<Intersectable*> objects, const std::string
 
                 } else if (closest_hit == INFINITY) {
 
-                    pixels[(row * this->image_width) + col] = {{0, 0, 0}};
+                    Color sky = {{
+                        255.0 * row / this->image_height,
+                        255,
+                        255,
+                    }};
 
+                    pixels[(row * this->image_width) + col] = sky;
                 }
             }
         }
