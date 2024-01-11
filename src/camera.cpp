@@ -1,6 +1,10 @@
+#include <optional>
 #include <fstream>
 
 #include "camera.hpp"
+#include "color.hpp"
+#include "hit.hpp"
+#include "sphere.hpp"
 
 double to_radians (double degrees) {
     return degrees * M_PI / 180;

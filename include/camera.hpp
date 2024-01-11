@@ -1,10 +1,11 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
-#include "color.hpp"
+#include "matrix.hpp"
 #include "point.hpp"
-#include "sphere.hpp"
 #include "vector.hpp"
+
+class Sphere;
 
 class Camera {
 
