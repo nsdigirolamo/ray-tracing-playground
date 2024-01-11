@@ -35,15 +35,14 @@ TEST_CASE ("sphere intersection detects hits and misses") {
 
                     Hit hit = {
                         {{0, 0, 9}},
-                        {
-                            {{0, 0, 9}},
-                            {{0, 0, -1}}
-                        },
+                        {{0, 0, -1}},
+                        9,
                         {{0, 0, 0}}
                     };
 
                     compare_matrix(result.value().location, hit.location);
-                    compare_ray(result.value().normal, hit.normal);
+                    compare_matrix(result.value().normal, hit.normal);
+                    CHECK(result.value().distance == Approx(hit.distance));
                 }
             }
 
@@ -93,16 +92,15 @@ TEST_CASE ("sphere intersection detects hits and misses") {
 
                     Hit hit = {
                         {{0, 0, 10.0}},
-                        {
-                            {{0, 0, 10}},
-                            {{-1, 0, 0}}
-                        },
+                        {{-1, 0, 0}},
+                        10,
                         {{0, 0, 0}}
                     };
 
                     REQUIRE(result);
                     compare_matrix(result.value().location, hit.location);
-                    compare_ray(result.value().normal, hit.normal);
+                    compare_matrix(result.value().normal, hit.normal);
+                    CHECK(result.value().distance == Approx(hit.distance));
                 }
             }
         } AND_GIVEN("a ray directed away from a sphere") {

@@ -7,6 +7,7 @@ void compare_ray (const Ray& lhs, const Ray& rhs) {
 
 void compare_hit (const Hit& lhs, const Hit& rhs) {
     compare_matrix(lhs.location, rhs.location);
-    compare_ray(lhs.normal, rhs.normal);
+    compare_matrix(lhs.normal, rhs.normal);
+    CHECK(lhs.distance == Approx(rhs.distance));
     compare_matrix(lhs.color, rhs.color);
 }
