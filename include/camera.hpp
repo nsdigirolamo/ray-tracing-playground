@@ -1,6 +1,8 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
+#include <list>
+
 #include "matrix.hpp"
 #include "point.hpp"
 #include "vector.hpp"
