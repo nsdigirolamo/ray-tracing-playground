@@ -1,9 +1,13 @@
+#include "color.hpp"
+#include "hit.hpp"
+#include "point.hpp"
+#include "ray.hpp"
 #include "sphere.hpp"
 
-Sphere::Sphere (const Point& center, double radius) {
-    this->center = center;
-    this->radius = radius;
-}
+Sphere::Sphere (const Point& center, double radius)
+    : center(center)
+    , radius(radius)
+{ }
 
 std::optional<Hit> Sphere::intersects(const Ray& ray) const {
 
@@ -41,7 +45,6 @@ std::optional<Hit> Sphere::intersects(const Ray& ray) const {
         };
 
         return hit;
-
     }
 
     return {};
