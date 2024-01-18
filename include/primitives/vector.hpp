@@ -1,7 +1,9 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-#include "matrix.hpp"
+#include <cmath>
+
+#include "primitives/matrix.hpp"
 
 template <unsigned int height>
 requires (0 < height)
@@ -56,5 +58,8 @@ template <unsigned int height>
 Vector<height> unit (const Vector<height>& v) {
     return v / length(v);
 }
+
+using Color = Vector<3>;
+using Point = Vector<3>;
 
 #endif

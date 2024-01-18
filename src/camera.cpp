@@ -1,12 +1,6 @@
-#include <optional>
-#include <fstream>
+#include <ostream>
 
 #include "camera.hpp"
-#include "color.hpp"
-#include "hit.hpp"
-#include "intersectable.hpp"
-#include "ray.hpp"
-#include "sphere.hpp"
 
 const Point default_location = {{0, 0, 0}};
 constexpr int default_image_height = 1080;
@@ -33,7 +27,7 @@ Camera::Camera () {
 }
 
 Camera::Camera (
-    const Point &location,
+    const Point& location,
     const int image_height,
     const int image_width,
     const double horizontal_fov,
@@ -41,7 +35,7 @@ Camera::Camera (
 )
     : location(location)
     , image_height(image_height)
-    , image_width(image_width) 
+    , image_width(image_width)
     , horizontal_fov(horizontal_fov)
 {
     double hfov = to_radians(horizontal_fov);
@@ -63,18 +57,18 @@ Camera::Camera (
 }
 
 Camera::Camera (
-    const Point &location,
+    const Point& location,
     const int image_height,
     const int image_width,
     const double vertical_fov,
     const double horizontal_fov,
     const double yaw
-) 
+)
     : location(location)
     , image_height(image_height)
     , image_width(image_width)
     , vertical_fov(vertical_fov)
-    , horizontal_fov(horizontal_fov) 
+    , horizontal_fov(horizontal_fov)
 {
     double hfov = to_radians(horizontal_fov);
     double vfov = to_radians(vertical_fov);
@@ -119,70 +113,100 @@ double Camera::getFocalLength () const {
     return this->focal_length;
 }
 
-void Camera::capture (const std::list<Intersectable*> objects, const std::string file_name) const {
+std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const int steps) const {
 
-    Color* pixels = new Color[this->image_width * this->image_height];
+    std::cout << "Rendering image...\n";
 
     const double pixel_height = this->view_height / this->image_height;
     const double pixel_width = this->view_width / this->image_width;
 
-    for (int row = 0; row < this->image_height; ++row) {
+    std::vector<Color> pixels (this->image_width * this->image_height);
+
+    for (int row = this->image_height - 1; 0 <= row; --row) {
         for (int col = 0; col < this->image_width; ++col) {
 
-            Vector<3> view_ray {{
+            Vector<3> view_direction {{
                 (col * pixel_width) - (this->view_width / 2),
                 (row * pixel_height) - (this->view_height / 2),
                 this->focal_length
             }};
 
-            Vector<3> ray_direction = this->rotation_matrix.transform(view_ray);
+            view_direction = this->rotation_matrix.transform(view_direction);
 
-            const Ray ray = {this->location, ray_direction};
+            Ray ray = {this->location, view_direction};
 
-            double closest_hit = INFINITY;
-
-            for (auto it = objects.begin(); it != objects.end(); ++it) {
-
-                std::optional<Hit> hit = (*it)->intersects(ray);
-
-                if (hit && hit.value().distance < closest_hit) {
-
-                    pixels[(row * this->image_width) + col] = hit.value().color;
-                    closest_hit = hit.value().distance;
-
-                } else if (closest_hit == INFINITY) {
-
-                    Color sky = {{
-                        255.0 * row / this->image_height,
-                        255,
-                        255,
-                    }};
-
-                    pixels[(row * this->image_width) + col] = sky;
-                }
-            }
-        }
-    }
-
-    std::ofstream file(file_name + ".ppm");
-
-    file << "P3\n\n";
-
-    file << "# VFOV: " << this->vertical_fov << "\n";
-    file << "# HFOV: " << this->horizontal_fov << "\n";
-    file << "# VHGT: " << this->view_height << "\n";
-    file << "# VWID: " << this->view_width << "\n";
-    file << "# FLNG: " << this->focal_length << "\n\n";
-
-    file << this->image_width << " " << this->image_height << "\n" << "255\n";
-
-    for (int row = this->image_height - 1; 0 <= row; --row) {
-        for (int col = 0; col < this->image_width; ++col) {
-            Color pixel = pixels[(row * this->image_width) + col];
-            file << (int)(pixel[0]) << " " << (int)(pixel[1]) << " " << (int)(pixel[2]) << "\n";
+            pixels[(row * this->image_width) + col] = trace(ray, scene, steps);
         }
         std::cout << row << " lines remaining...\n";
     }
 
-    delete [] pixels;
+    std::cout << "Done rendering!\n";
+
+    return pixels;
+}
+
+Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, const int steps) {
+
+    std::optional<Hit> closest_hit = {};
+    const Material* material;
+
+    for (auto it = intersectables.begin(); it != intersectables.end(); ++it) {
+
+        std::optional<Hit> hit = (*it)->intersects(ray);
+
+        bool hit_is_closest = hit && closest_hit && hit.value().distance < closest_hit.value().distance;
+
+        if (hit && (!closest_hit || hit_is_closest)) {
+
+            closest_hit.emplace(hit.value());
+            material = (*it)->getMaterial();
+        }
+    }
+
+    if (closest_hit) {
+
+        Hit hit = closest_hit.value();
+
+        double absorbance = material->getAbsorbance();
+        Color color = material->getColor();
+
+        int new_steps = steps - 1;
+
+        /**
+
+        // Not working right now...
+
+        if (0 < steps) {
+            return absorbance * trace(material->scatter(hit), intersectables, new_steps);
+        }
+        */
+
+        return color;
+    }
+
+    Color sky = {{
+        150,
+        232,
+        252
+    }};
+
+    return sky;
+}
+
+void outputImage (const std::string file_name, std::vector<Color> pixels, int image_height, int image_width) {
+
+    std::cout  << "Printing image to file...\n";
+
+    std::ofstream file(file_name + ".ppm");
+
+    file << "P3\n\n" << image_width << " " << image_height << "\n" << "255\n";
+
+    for (int row = image_height - 1; 0 <= row; --row) {
+        for (int col = 0; col < image_width; ++col) {
+            Color pixel = pixels[(row * image_width) + col];
+            file << (int)(pixel[0]) << " " << (int)(pixel[1]) << " " << (int)(pixel[2]) << "\n";
+        }
+    }
+
+    std::cout << "Done printing to file!\n";
 }

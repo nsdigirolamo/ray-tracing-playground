@@ -1,9 +1,9 @@
 #ifndef TEST_UTILS_HPP
 #define TEST_UTILS_HPP
 
-#include "lib/catch2/catch.hpp"
 #include "hit.hpp"
-#include "matrix.hpp"
+#include "lib/catch2/catch.hpp"
+#include "primitives/matrix.hpp"
 #include "ray.hpp"
 
 template <unsigned int height, unsigned int width>

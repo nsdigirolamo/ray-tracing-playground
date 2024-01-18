@@ -1,11 +1,9 @@
-#include "color.hpp"
-#include "hit.hpp"
-#include "plane.hpp"
-#include "ray.hpp"
+#include "intersectables/plane.hpp"
 
-Plane::Plane (const Point &origin, const Vector<3> &normal)
+Plane::Plane (const Point &origin, const Vector<3> &normal, const Material& material)
     : origin(origin)
     , normal(unit(normal))
+    , material(material)
 { }
 
 std::optional<Hit> Plane::intersects (const Ray &ray) const {
@@ -21,23 +19,16 @@ std::optional<Hit> Plane::intersects (const Ray &ray) const {
 
         if (distance < 0) { return {}; }
 
-        Point location = ray.direction * distance + ray.origin;
-
-        Color color {{
-            255 * ((this->normal[0] + 1) / 2),
-            255 * ((this->normal[1] + 1) / 2),
-            255 * ((this->normal[2] + 1) / 2)
-        }};
-
-        Hit hit = {
-            location,
-            this->normal,
-            distance,
-            color
-        };
+        Point intersection = ray.direction * distance + ray.origin;
+        Ray surface_normal = {intersection, this->normal};
+        Hit hit = {distance, surface_normal};
 
         return hit;
     }
 
     return {};
+}
+
+const Material* Plane::getMaterial () const {
+    return &(this->material);
 }
