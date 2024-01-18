@@ -1,5 +1,5 @@
-#include "lib/catch2/catch.hpp"
 #include "camera.hpp"
+#include "lib/catch2/catch.hpp"
 #include "test/test_utils.hpp"
 
 TEST_CASE ("camera initializes correctly") {
