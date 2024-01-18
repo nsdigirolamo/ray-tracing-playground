@@ -1,6 +1,7 @@
-#include "lib/catch2/catch.hpp"
 #include "hit.hpp"
-#include "sphere.hpp"
+#include "intersectables/sphere.hpp"
+#include "lib/catch2/catch.hpp"
+#include "materials/diffuse.hpp"
 #include "test/test_utils.hpp"
 
 /**
@@ -18,9 +19,15 @@ TEST_CASE ("sphere intersection detects hits and misses") {
 
         GIVEN ("a ray directed towards a sphere") {
 
+            Diffuse material = {
+                0.5,
+                {{255, 255, 255}}
+            };
+
             Sphere sphere = {
                 {{0, 0, 10.0}},
-                1.0
+                1.0,
+                material
             };
 
             WHEN ("the intersect function is called") {
@@ -33,24 +40,32 @@ TEST_CASE ("sphere intersection detects hits and misses") {
 
                 } AND_THEN("the hit occurs at the closest location with the correct normal") {
 
-                    Hit hit = {
+                    Ray surface_normal = {
                         {{0, 0, 9}},
-                        {{0, 0, -1}},
-                        9,
-                        {{0, 0, 0}}
+                        {{0, 0, -1}}
                     };
 
-                    compare_matrix(result.value().location, hit.location);
-                    compare_matrix(result.value().normal, hit.normal);
+                    Hit hit = {
+                        9,
+                        surface_normal
+                    };
+
+                    compare_ray(result.value().surface_normal, surface_normal);
                     CHECK(result.value().distance == Approx(hit.distance));
                 }
             }
 
         } AND_GIVEN("a ray directed away from a sphere") {
 
+            Diffuse material = {
+                0.5,
+                {{255, 255, 255}}
+            };
+
             Sphere sphere = {
                 {{0, 0, -10.0}},
-                1.0
+                1.0,
+                material
             };
 
             WHEN ("the intersect function is called") {
@@ -75,9 +90,15 @@ TEST_CASE ("sphere intersection detects hits and misses") {
 
         GIVEN ("a ray directed towards a sphere") {
 
+            Diffuse material = {
+                0.5,
+                {{255, 255, 255}}
+            };
+
             Sphere sphere = {
                 {{1.0, 0, 10.0}},
-                1.0
+                1.0,
+                material
             };
 
             WHEN ("the intersect function is called") {
@@ -90,24 +111,32 @@ TEST_CASE ("sphere intersection detects hits and misses") {
 
                 } AND_THEN("the hit occurs at the location with the correct normal") {
 
-                    Hit hit = {
+                    Ray surface_normal = {
                         {{0, 0, 10.0}},
                         {{-1, 0, 0}},
+                    };
+
+                    Hit hit = {
                         10,
-                        {{0, 0, 0}}
+                        surface_normal
                     };
 
                     REQUIRE(result);
-                    compare_matrix(result.value().location, hit.location);
-                    compare_matrix(result.value().normal, hit.normal);
+                    compare_ray(result.value().surface_normal, surface_normal);
                     CHECK(result.value().distance == Approx(hit.distance));
                 }
             }
         } AND_GIVEN("a ray directed away from a sphere") {
 
+            Diffuse material = {
+                0.5,
+                {{255, 255, 255}}
+            };
+
             Sphere sphere = {
                 {{1.0, 0, -10.0}},
-                1.0
+                1.0,
+                material
             };
 
             WHEN ("the intersect function is called") {
@@ -132,9 +161,15 @@ TEST_CASE ("sphere intersection detects hits and misses") {
 
         GIVEN ("a ray misdirected towards a sphere") {
 
+            Diffuse material = {
+                0.5,
+                {{255, 255, 255}}
+            };
+
             Sphere sphere = {
                 {{0, 0, 10.0}},
-                1.0
+                1.0,
+                material
             };
 
             WHEN ("the intersect function is called") {
