@@ -1,6 +1,6 @@
 #include "lib/catch2/catch.hpp"
+#include "primitives/vector.hpp"
 #include "test/test_utils.hpp"
-#include "vector.hpp"
 
 TEST_CASE ("vector initializers initialize properly") {
 
