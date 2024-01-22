@@ -12,12 +12,11 @@
 #include "primitives/vector.hpp"
 #include "ray.hpp"
 
-class Intersectable;
-class Sphere;
-
 class Camera {
 
     private:
+
+        Point location;
 
         int image_height;
         int image_width;
@@ -29,11 +28,9 @@ class Camera {
         double view_width;
         double focal_length;
 
-    public:
-
-        Point location;
-
         Matrix<3, 3> rotation_matrix;
+
+    public:
 
         Camera ();
 
@@ -54,6 +51,8 @@ class Camera {
             const double yaw
         );
 
+        Point getLocation () const;
+
         int getImageHeight () const;
         int getImageWidth () const;
 
@@ -63,6 +62,8 @@ class Camera {
         double getViewHeight () const;
         double getViewWidth () const;
         double getFocalLength () const;
+
+        Matrix<3, 3> getRotationMatrix () const;
 
         std::vector<Color> capture (const std::list<Intersectable*> scene, const int steps) const;
 };

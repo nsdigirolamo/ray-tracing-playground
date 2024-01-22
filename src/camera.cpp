@@ -85,6 +85,10 @@ Camera::Camera (
     }};
 }
 
+Point Camera::getLocation () const {
+    return this->location;
+}
+
 int Camera::getImageHeight () const {
     return this->image_height;
 }
@@ -111,6 +115,10 @@ double Camera::getViewWidth () const {
 
 double Camera::getFocalLength () const {
     return this->focal_length;
+}
+
+Matrix<3, 3> Camera::getRotationMatrix () const {
+    return this->rotation_matrix;
 }
 
 std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const int steps) const {
