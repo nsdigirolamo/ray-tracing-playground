@@ -26,7 +26,7 @@ TEST_CASE ("camera initializes correctly") {
                 double view_width = 1.41421;
                 double view_height = 0.79550;
                 double focal_length = 0.70711;
-                Matrix<3, 3> rotation_identity = identity(camera.rotation_matrix);
+                Matrix<3, 3> rotation_identity = identity(camera.getRotationMatrix());
 
                 THEN ("the vertical FOV is properly calculated") {
 
@@ -46,7 +46,7 @@ TEST_CASE ("camera initializes correctly") {
 
                 } AND_THEN ("the rotation matrix is the identity matrix") {
 
-                    compare_matrix(camera.rotation_matrix, rotation_identity);
+                    compare_matrix(camera.getRotationMatrix(), rotation_identity);
 
                 }
             }
