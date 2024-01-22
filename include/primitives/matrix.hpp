@@ -186,7 +186,7 @@ std::ostream& operator<< (std::ostream& output, const Matrix<height, width>& m) 
 }
 
 template <unsigned int height>
-Matrix<height, height> identity (Matrix<height, height>& matrix) {
+Matrix<height, height> identity (const Matrix<height, height>& matrix) {
     Matrix<height, height> identity_matrix;
     for (int i = 0; i < height; i++) {
         identity_matrix[i, i] = 1.0;
