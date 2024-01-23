@@ -1,18 +1,22 @@
 #include "random_utils.hpp"
 
-Point generateRandomPointInUnitSphere () {
+std::random_device generator;
+std::uniform_real_distribution<double> distribution(-1.0, 1.0);
 
-    std::random_device generator;
-    std::uniform_real_distribution<double> distribution(-1.0, 1.0);
+double randomDouble () {
+    return distribution(generator);
+}
+
+Point randomPointInUnitSphere () {
 
     double x, y, z;
     Point point;
 
     do {
 
-        x = distribution(generator);
-        y = distribution(generator);
-        z = distribution(generator);
+        x = randomDouble();
+        y = randomDouble();
+        z = randomDouble();
 
         point = {{x, y, z}};
 
@@ -21,8 +25,8 @@ Point generateRandomPointInUnitSphere () {
     return point;
 }
 
-Point generateRandomPointInUnitHemisphere (const Vector<3>& normal) {
+Point randomPointInUnitHemisphere (const Vector<3>& normal) {
 
-    Point in_sphere = generateRandomPointInUnitSphere();
+    Point in_sphere = randomPointInUnitSphere();
     return dot(normal, in_sphere) > 0 ? in_sphere : -1 * in_sphere;
 }

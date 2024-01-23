@@ -5,7 +5,9 @@
 
 #include "primitives/vector.hpp"
 
-Point generateRandomPointInUnitSphere ();
-Point generateRandomPointInUnitHemisphere (const Vector<3>& normal);
+double randomDouble ();
+
+Point randomPointInUnitSphere ();
+Point randomPointInUnitHemisphere (const Vector<3>& normal);
 
 #endif
