@@ -4,6 +4,7 @@
 #include "hit.hpp"
 #include "materials/material.hpp"
 #include "primitives/vector.hpp"
+#include "random_utils.hpp"
 #include "ray.hpp"
 
 class Diffuse : public Material {

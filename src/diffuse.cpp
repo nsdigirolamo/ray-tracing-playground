@@ -17,7 +17,8 @@ Color Diffuse::getColor () const {
 }
 
 Ray Diffuse::scatter (const Hit &hit) const {
-
-    return hit.surface_normal;
-
+    return {
+        hit.surface_normal.origin,
+        generateRandomPointInUnitHemisphere(hit.surface_normal.direction)
+    };
 }
