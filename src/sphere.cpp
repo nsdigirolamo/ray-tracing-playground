@@ -1,5 +1,7 @@
 #include "intersectables/sphere.hpp"
 
+const double minimum_distance = 0.0001;
+
 Sphere::Sphere (const Point& origin, double radius, Material& material)
     : origin(origin)
     , radius(radius)
@@ -20,7 +22,7 @@ std::optional<Hit> Sphere::intersects(const Ray& ray) const {
         double uoc = -1 * dot(ray.direction, (Vector<3>)(ray.origin - this->origin));
         double distance = uoc - sqrt(discriminant);
 
-        if (distance < 0) { return {}; }
+        if (distance < minimum_distance) { return {}; }
 
         Point intersection = ray.origin + ray.direction * distance;
         Ray surface_normal = {intersection, intersection - this->origin};
