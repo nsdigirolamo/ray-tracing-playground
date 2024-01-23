@@ -153,7 +153,7 @@ std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const
     return pixels;
 }
 
-Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, const int steps) {
+Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, int steps) {
 
     std::optional<Hit> closest_hit = {};
     const Material* material;
@@ -178,16 +178,11 @@ Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, con
         double absorbance = material->getAbsorbance();
         Color color = material->getColor();
 
-        int new_steps = steps - 1;
-
-        /**
-
-        // Not working right now...
+        --steps;
 
         if (0 < steps) {
-            return absorbance * trace(material->scatter(hit), intersectables, new_steps);
+            return absorbance * trace(material->scatter(hit), intersectables, steps);
         }
-        */
 
         return color;
     }
