@@ -2,6 +2,7 @@
 #define MATERIAL_HPP
 
 #include "hit.hpp"
+#include "primitives/color.hpp"
 #include "primitives/vector.hpp"
 #include "ray.hpp"
 

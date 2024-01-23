@@ -3,6 +3,7 @@
 
 #include "hit.hpp"
 #include "materials/material.hpp"
+#include "primitives/color.hpp"
 #include "primitives/vector.hpp"
 #include "random_utils.hpp"
 #include "ray.hpp"
