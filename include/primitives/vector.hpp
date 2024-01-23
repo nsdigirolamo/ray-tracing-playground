@@ -59,7 +59,6 @@ Vector<height> unit (const Vector<height>& v) {
     return v / length(v);
 }
 
-using Color = Vector<3>;
 using Point = Vector<3>;
 
 #endif
