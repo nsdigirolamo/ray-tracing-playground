@@ -27,6 +27,6 @@ int main () {
 
     std::list<Intersectable*> objects = {&sphere, &plane};
 
-    std::vector<Color> pixels = camera.capture(objects, 1);
+    std::vector<Color> pixels = camera.capture(objects, 5);
     outputImage("scene", pixels, 1080, 1920);
 }
