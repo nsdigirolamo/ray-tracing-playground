@@ -1,15 +1,15 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
-#include <fstream>
 #include <list>
 #include <optional>
+#include <ostream>
 #include <vector>
 
-#include "hit.hpp"
 #include "intersectables/intersectable.hpp"
-#include "primitives/matrix.hpp"
+#include "primitives/color.hpp"
 #include "primitives/vector.hpp"
+#include "random_utils.hpp"
 #include "ray.hpp"
 
 class Camera {
@@ -27,6 +27,9 @@ class Camera {
         double view_height;
         double view_width;
         double focal_length;
+
+        double pixel_height;
+        double pixel_width;
 
         Matrix<3, 3> rotation_matrix;
 
@@ -63,12 +66,15 @@ class Camera {
         double getViewWidth () const;
         double getFocalLength () const;
 
+        double getPixelHeight () const;
+        double getPixelWidth () const;
+
         Matrix<3, 3> getRotationMatrix () const;
 
-        std::vector<Color> capture (const std::list<Intersectable*> scene, const int steps) const;
+        Ray generate_ray (const int x, const int y) const;
+        std::vector<Color> capture (const std::list<Intersectable*> scene, const int samples_per_pixel, const int steps_per_sample) const;
 };
 
 Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, const int steps);
-void outputImage (const std::string file_name, std::vector<Color> pixels, int image_height, int image_width);
 
 #endif
