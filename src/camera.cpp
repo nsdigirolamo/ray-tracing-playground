@@ -1,5 +1,3 @@
-#include <ostream>
-
 #include "camera.hpp"
 
 const Point default_location = {{0, 0, 0}};
@@ -44,6 +42,9 @@ Camera::Camera (
     this->view_height = this->view_width * image_height / image_width;
     this->focal_length = cos(hfov / 2);
 
+    this->pixel_height = this->view_height / this->image_height;
+    this->pixel_width = this->view_width / this->image_width;
+
     double vfov = atan((this->view_height / 2) / this->focal_length);
 
     this->vertical_fov = to_degrees(vfov) * 2;
@@ -76,6 +77,9 @@ Camera::Camera (
     this->view_height = 2 * sin(vfov / 2);
     this->focal_length = cos(vfov / 2);
     this->view_width = 2 * this->focal_length * tan(hfov / 2);
+
+    this->pixel_height = this->view_height / this->image_height;
+    this->pixel_width = this->view_width / this->image_width;
 
     const double radians_yaw = to_radians(yaw);
     this->rotation_matrix = {{
@@ -117,11 +121,38 @@ double Camera::getFocalLength () const {
     return this->focal_length;
 }
 
+double Camera::getPixelHeight () const {
+    return this->pixel_height;
+}
+
+double Camera::getPixelWidth () const {
+    return this->pixel_width;
+}
+
 Matrix<3, 3> Camera::getRotationMatrix () const {
     return this->rotation_matrix;
 }
 
-std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const int steps) const {
+Ray Camera::generate_ray (const int row, const int col) const {
+
+    double col_offset = pixel_width * randomDouble();
+    double row_offset = pixel_height * randomDouble();
+
+    Vector<3> view_direction {{
+        (col * pixel_width) + col_offset - (this->view_width / 2),
+        (row * pixel_height) + row_offset - (this->view_height / 2),
+        this->focal_length
+    }};
+
+    view_direction = this->rotation_matrix.transform(view_direction);
+
+    return {
+        this->location,
+        view_direction
+    };
+}
+
+std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const int samples_per_pixel, const int steps_per_sample) const {
 
     std::cout << "Rendering image...\n";
 
@@ -133,17 +164,14 @@ std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const
     for (int row = this->image_height - 1; 0 <= row; --row) {
         for (int col = 0; col < this->image_width; ++col) {
 
-            Vector<3> view_direction {{
-                (col * pixel_width) - (this->view_width / 2),
-                (row * pixel_height) - (this->view_height / 2),
-                this->focal_length
-            }};
+            Color color = {{0, 0, 0}};
 
-            view_direction = this->rotation_matrix.transform(view_direction);
+            for (int sample = 0; sample < samples_per_pixel; ++sample) {
+                Ray ray = this->generate_ray(row, col);
+                color += trace(ray, scene, steps_per_sample) / samples_per_pixel;
+            }
 
-            Ray ray = {this->location, view_direction};
-
-            pixels[(row * this->image_width) + col] = trace(ray, scene, steps);
+            pixels[(row * this->image_width) + col] = color;
         }
         std::cout << row << " lines remaining...\n";
     }
@@ -181,35 +209,17 @@ Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, int
         --steps;
 
         if (0 < steps) {
-            return absorbance * trace(material->scatter(hit), intersectables, steps);
+            return hadamard(color, absorbance * trace(material->scatter(hit), intersectables, steps));
         }
 
         return color;
     }
 
     Color sky = {{
-        150,
-        232,
-        252
+        0.60,
+        0.90,
+        1.0
     }};
 
     return sky;
-}
-
-void outputImage (const std::string file_name, std::vector<Color> pixels, int image_height, int image_width) {
-
-    std::cout  << "Printing image to file...\n";
-
-    std::ofstream file(file_name + ".ppm");
-
-    file << "P3\n\n" << image_width << " " << image_height << "\n" << "255\n";
-
-    for (int row = image_height - 1; 0 <= row; --row) {
-        for (int col = 0; col < image_width; ++col) {
-            Color pixel = pixels[(row * image_width) + col];
-            file << (int)(pixel[0]) << " " << (int)(pixel[1]) << " " << (int)(pixel[2]) << "\n";
-        }
-    }
-
-    std::cout << "Done printing to file!\n";
 }
