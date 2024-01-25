@@ -168,10 +168,10 @@ std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const
 
             for (int sample = 0; sample < samples_per_pixel; ++sample) {
                 Ray ray = this->generate_ray(row, col);
-                color += trace(ray, scene, steps_per_sample) / samples_per_pixel;
+                color += trace(ray, scene, steps_per_sample);
             }
 
-            pixels[(row * this->image_width) + col] = color;
+            pixels[(row * this->image_width) + col] = color / samples_per_pixel;
         }
         std::cout << row << " lines remaining...\n";
     }
@@ -209,7 +209,7 @@ Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, int
         --steps;
 
         if (0 < steps) {
-            return hadamard(color, absorbance * trace(material->scatter(hit), intersectables, steps));
+            return hadamard(color, trace(material->scatter(hit), intersectables, steps));
         }
 
         return color;
