@@ -13,20 +13,20 @@ int main () {
 
     Point sphere_origin = {{0, 0, 2.0}};
     double sphere_radius = 0.5;
-    Color sphere_color = {{1.0, 0, 0}};
+    Color sphere_color = {{0.7, 0.3, 0.3}};
     double sphere_absorbance = 0.5;
     Diffuse sphere_material = {sphere_absorbance, sphere_color};
     Sphere sphere = {sphere_origin, sphere_radius, sphere_material};
 
     Point plane_origin = {{0, -0.5, 0}};
     Vector<3> plane_normal = {{0, 1, 0}};
-    Color plane_color = {{0, 1.0, 0}};
+    Color plane_color = {{0.8, 0.8, 0.0}};
     double plane_absorbance = 0.5;
     Diffuse plane_material = {plane_absorbance, plane_color};
     Plane plane = {plane_origin, plane_normal, plane_material};
 
     std::list<Intersectable*> objects = {&sphere, &plane};
 
-    std::vector<Color> pixels = camera.capture(objects, 5, 10);
-    writeImage("scene", pixels, 1080, 1920);
+    std::vector<Color> pixels = camera.capture(objects, 100, 50);
+    writeImage("scene", pixels, camera.getImageHeight(), camera.getImageWidth());
 }
