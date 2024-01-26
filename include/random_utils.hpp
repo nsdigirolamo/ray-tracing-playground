@@ -9,5 +9,6 @@ double randomDouble ();
 
 Point randomPointInUnitSphere ();
 Point randomPointInUnitHemisphere (const Vector<3>& normal);
+Vector<2> randomPointInUnitCircle ();
 
 #endif

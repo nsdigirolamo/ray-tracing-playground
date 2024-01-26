@@ -30,3 +30,20 @@ Point randomPointInUnitHemisphere (const Vector<3>& normal) {
     Point in_sphere = randomPointInUnitSphere();
     return dot(normal, in_sphere) > 0 ? in_sphere : -1 * in_sphere;
 }
+
+Vector<2> randomPointInUnitCircle () {
+
+    double x, y;
+    Vector<2> point;
+
+    do {
+
+        x = randomDouble();
+        y = randomDouble();
+
+        point = {{x, y}};
+
+    } while (1 < length(point));
+
+    return point;
+}
