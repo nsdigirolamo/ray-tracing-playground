@@ -25,10 +25,18 @@ Point randomPointInUnitSphere () {
     return point;
 }
 
+Point randomPointOnUnitSphere () {
+    return unit(randomPointInUnitSphere());
+}
+
 Point randomPointInUnitHemisphere (const Vector<3>& normal) {
 
     Point in_sphere = randomPointInUnitSphere();
     return dot(normal, in_sphere) > 0 ? in_sphere : -1 * in_sphere;
+}
+
+Point randomPointOnUnitHemisphere (const Vector<3>& normal) {
+    return unit(randomPointInUnitHemisphere(normal));
 }
 
 Vector<2> randomPointInUnitCircle () {
@@ -46,4 +54,8 @@ Vector<2> randomPointInUnitCircle () {
     } while (1 < length(point));
 
     return point;
+}
+
+Vector<2> randomPointOnUnitCircle () {
+    return unit(randomPointInUnitCircle());
 }
