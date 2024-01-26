@@ -135,12 +135,19 @@ Matrix<3, 3> Camera::getRotationMatrix () const {
 
 Ray Camera::generate_ray (const int row, const int col) const {
 
-    double col_offset = pixel_width * randomDouble();
-    double row_offset = pixel_height * randomDouble();
+    double x_position = col * pixel_width;
+    double y_position = row * pixel_height;
+
+    Vector<2> offset = randomPointInUnitCircle();
+    double sample_x_offset = offset[0] * pixel_width;
+    double sample_y_offset = offset[1] * pixel_height;
+
+    double global_x_offset = this->view_width / 2;
+    double global_y_offset = this->view_height / 2;
 
     Vector<3> view_direction {{
-        (col * pixel_width) + col_offset - (this->view_width / 2),
-        (row * pixel_height) + row_offset - (this->view_height / 2),
+        x_position + sample_x_offset - global_x_offset,
+        y_position + sample_y_offset - global_y_offset,
         this->focal_length
     }};
 
