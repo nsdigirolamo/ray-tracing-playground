@@ -5,27 +5,51 @@
 #include "intersectables/plane.hpp"
 #include "intersectables/sphere.hpp"
 #include "materials/diffuse.hpp"
+#include "materials/metallic.hpp"
 #include "primitives/vector.hpp"
 
 int main () {
 
-    Camera camera;
+    Camera camera {
+        {{0, 0, 0}},
+        1080,
+        1920,
+        90,
+        0
+    };
 
-    Point sphere_origin = {{0, 0, 2.0}};
-    double sphere_radius = 0.5;
-    Color sphere_color = {{0.7, 0.3, 0.3}};
-    double sphere_absorbance = 0.5;
-    Diffuse sphere_material = {sphere_absorbance, sphere_color};
-    Sphere sphere = {sphere_origin, sphere_radius, sphere_material};
+    Color greenish = {{0.3, 0.7, 0.3}};
+    Metallic greenish_metal = {greenish};
 
-    Point plane_origin = {{0, -0.5, 0}};
-    Vector<3> plane_normal = {{0, 1, 0}};
-    Color plane_color = {{0.8, 0.8, 0.0}};
-    double plane_absorbance = 0.5;
-    Diffuse plane_material = {plane_absorbance, plane_color};
-    Plane plane = {plane_origin, plane_normal, plane_material};
+    Sphere metal_sphere = {
+        {{-1.0, 0, 2.0}},
+        0.5,
+        greenish_metal
+    };
 
-    std::list<Intersectable*> objects = {&sphere, &plane};
+    Color pinkish = {{0.7, 0.3, 0.3}};
+    Diffuse pinkish_diffuse = {pinkish};
+
+    Sphere diffuse_sphere = {
+        {{0, 0, 2.0}},
+        0.5,
+        pinkish_diffuse
+    };
+
+    Color yellowish = {{0.8, 0.8, 0.0}};
+    Diffuse yellowish_diffuse = {yellowish};
+
+    Plane diffuse_plane = {
+        {{0, -0.5, 0}},
+        {{0, 1, 0}},
+        yellowish_diffuse
+    };
+
+    std::list<Intersectable*> objects = {
+        &metal_sphere,
+        &diffuse_sphere,
+        &diffuse_plane
+    };
 
     std::vector<Color> pixels = camera.capture(objects, 100, 50);
     writeImage("scene", pixels, camera.getImageHeight(), camera.getImageWidth());
