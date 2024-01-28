@@ -20,7 +20,6 @@ TEST_CASE ("sphere intersection detects hits and misses") {
         GIVEN ("a ray directed towards a sphere") {
 
             Diffuse material = {
-                0.5,
                 {{255, 255, 255}}
             };
 
@@ -46,6 +45,7 @@ TEST_CASE ("sphere intersection detects hits and misses") {
                     };
 
                     Hit hit = {
+                        ray.direction,
                         9,
                         surface_normal
                     };
@@ -58,7 +58,6 @@ TEST_CASE ("sphere intersection detects hits and misses") {
         } AND_GIVEN("a ray directed away from a sphere") {
 
             Diffuse material = {
-                0.5,
                 {{255, 255, 255}}
             };
 
@@ -91,7 +90,6 @@ TEST_CASE ("sphere intersection detects hits and misses") {
         GIVEN ("a ray directed towards a sphere") {
 
             Diffuse material = {
-                0.5,
                 {{255, 255, 255}}
             };
 
@@ -117,6 +115,7 @@ TEST_CASE ("sphere intersection detects hits and misses") {
                     };
 
                     Hit hit = {
+                        ray.direction,
                         10,
                         surface_normal
                     };
@@ -129,7 +128,6 @@ TEST_CASE ("sphere intersection detects hits and misses") {
         } AND_GIVEN("a ray directed away from a sphere") {
 
             Diffuse material = {
-                0.5,
                 {{255, 255, 255}}
             };
 
@@ -162,7 +160,6 @@ TEST_CASE ("sphere intersection detects hits and misses") {
         GIVEN ("a ray misdirected towards a sphere") {
 
             Diffuse material = {
-                0.5,
                 {{255, 255, 255}}
             };
 
