@@ -7,6 +7,7 @@ class Hit {
 
     public:
 
+    const Vector<3> incoming;
     const double distance;
     const Ray surface_normal;
 };
