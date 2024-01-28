@@ -59,6 +59,12 @@ Vector<height> unit (const Vector<height>& v) {
     return v / length(v);
 }
 
+template <unsigned int height>
+Vector<height> reflect (const Vector<height>& vector, const Vector<height>& surface_normal) {
+    Vector<height> normal = unit(surface_normal);
+    return vector - 2 * dot(vector, normal) * normal;
+}
+
 using Point = Vector<3>;
 
 #endif
