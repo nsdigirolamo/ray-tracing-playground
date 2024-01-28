@@ -1,4 +1,4 @@
-#ifndef RANDOM_UTILS_HPPS
+#ifndef RANDOM_UTILS_HPP
 #define RANDOM_UTILS_HPP
 
 #include <random>
