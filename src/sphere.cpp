@@ -26,7 +26,7 @@ std::optional<Hit> Sphere::intersects(const Ray& ray) const {
 
         Point intersection = ray.origin + ray.direction * distance;
         Ray surface_normal = {intersection, intersection - this->origin};
-        Hit hit = {distance, surface_normal};
+        Hit hit = {ray.direction, distance, surface_normal};
 
         return hit;
     }
