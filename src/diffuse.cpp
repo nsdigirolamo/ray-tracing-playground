@@ -1,16 +1,6 @@
 #include "materials/diffuse.hpp"
 
-Diffuse::Diffuse (
-    const double absorbance,
-    const Color &color
-)
-    : absorbance(absorbance)
-    , color(color)
-{ }
-
-double Diffuse::getAbsorbance () const {
-    return this->absorbance;
-}
+Diffuse::Diffuse (const Color& color) : color(color) { }
 
 Color Diffuse::getColor () const {
     return this->color;

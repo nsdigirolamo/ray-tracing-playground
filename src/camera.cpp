@@ -209,14 +209,15 @@ Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, int
     if (closest_hit) {
 
         Hit hit = closest_hit.value();
-
-        double absorbance = material->getAbsorbance();
         Color color = material->getColor();
 
         --steps;
 
         if (0 < steps) {
-            return hadamard(color, trace(material->scatter(hit), intersectables, steps));
+            return hadamard(
+                color,
+                trace(material->scatter(hit), intersectables, steps)
+            );
         }
 
         return color;

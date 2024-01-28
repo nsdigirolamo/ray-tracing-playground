@@ -10,7 +10,6 @@ class Material {
 
     public:
 
-        virtual double getAbsorbance () const = 0;
         virtual Color getColor () const = 0;
         virtual Ray scatter (const Hit& hit) const = 0;
 };
