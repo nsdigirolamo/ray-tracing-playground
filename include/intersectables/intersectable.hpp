@@ -12,7 +12,7 @@ class Intersectable {
     public:
 
         virtual std::optional<Hit> intersects (const Ray& ray) const = 0;
-        virtual const Material* getMaterial () const = 0;
+        virtual const Material& getMaterial () const = 0;
 };
 
 #endif

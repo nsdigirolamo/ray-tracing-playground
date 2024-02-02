@@ -2,15 +2,13 @@
 
 const double minimum_distance = 0.0001;
 
-Sphere::Sphere (const Point& origin, double radius, Material& material)
+Sphere::Sphere (const Point& origin, double radius, std::unique_ptr<Material> material)
     : origin(origin)
     , radius(radius)
-    , material(material)
+    , material(std::move(material))
 { }
 
 std::optional<Hit> Sphere::intersects(const Ray& ray) const {
-
-    // https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection#Calculation_using_vectors_in_3D
 
     Vector<3> ud = unit(ray.direction);
     Vector<3> oc = ray.origin - this->origin;
@@ -34,6 +32,6 @@ std::optional<Hit> Sphere::intersects(const Ray& ray) const {
     return {};
 }
 
-const Material* Sphere::getMaterial () const {
-    return &(this->material);
+const Material& Sphere::getMaterial () const {
+    return *(this->material);
 }

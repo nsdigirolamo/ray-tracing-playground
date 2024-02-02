@@ -2,10 +2,10 @@
 
 const double minimum_distance = 0.0001;
 
-Plane::Plane (const Point &origin, const Vector<3> &normal, const Material& material)
+Plane::Plane (const Point& origin, const Vector<3>& normal, std::unique_ptr<Material> material)
     : origin(origin)
     , normal(unit(normal))
-    , material(material)
+    , material(std::move(material))
 { }
 
 std::optional<Hit> Plane::intersects (const Ray &ray) const {
@@ -31,6 +31,6 @@ std::optional<Hit> Plane::intersects (const Ray &ray) const {
     return {};
 }
 
-const Material* Plane::getMaterial () const {
-    return &(this->material);
+const Material& Plane::getMaterial () const {
+    return *(this->material);
 }
