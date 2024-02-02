@@ -10,6 +10,8 @@
 
 TEST_CASE ("sphere intersection detects hits and misses") {
 
+    Diffuse material = { RED };
+
     SECTION ("two intersections") {
 
         Ray ray = {
@@ -19,14 +21,10 @@ TEST_CASE ("sphere intersection detects hits and misses") {
 
         GIVEN ("a ray directed towards a sphere") {
 
-            Diffuse material = {
-                {{255, 255, 255}}
-            };
-
             Sphere sphere = {
                 {{0, 0, 10.0}},
                 1.0,
-                material
+                std::make_unique<Diffuse>(material)
             };
 
             WHEN ("the intersect function is called") {
@@ -57,14 +55,10 @@ TEST_CASE ("sphere intersection detects hits and misses") {
 
         } AND_GIVEN("a ray directed away from a sphere") {
 
-            Diffuse material = {
-                {{255, 255, 255}}
-            };
-
             Sphere sphere = {
                 {{0, 0, -10.0}},
                 1.0,
-                material
+                std::make_unique<Diffuse>(material)
             };
 
             WHEN ("the intersect function is called") {
@@ -89,14 +83,10 @@ TEST_CASE ("sphere intersection detects hits and misses") {
 
         GIVEN ("a ray directed towards a sphere") {
 
-            Diffuse material = {
-                {{255, 255, 255}}
-            };
-
             Sphere sphere = {
                 {{1.0, 0, 10.0}},
                 1.0,
-                material
+                std::make_unique<Diffuse>(material)
             };
 
             WHEN ("the intersect function is called") {
@@ -127,14 +117,10 @@ TEST_CASE ("sphere intersection detects hits and misses") {
             }
         } AND_GIVEN("a ray directed away from a sphere") {
 
-            Diffuse material = {
-                {{255, 255, 255}}
-            };
-
             Sphere sphere = {
                 {{1.0, 0, -10.0}},
                 1.0,
-                material
+                std::make_unique<Diffuse>(material)
             };
 
             WHEN ("the intersect function is called") {
@@ -159,14 +145,10 @@ TEST_CASE ("sphere intersection detects hits and misses") {
 
         GIVEN ("a ray misdirected towards a sphere") {
 
-            Diffuse material = {
-                {{255, 255, 255}}
-            };
-
             Sphere sphere = {
                 {{0, 0, 10.0}},
                 1.0,
-                material
+                std::make_unique<Diffuse>(material)
             };
 
             WHEN ("the intersect function is called") {
