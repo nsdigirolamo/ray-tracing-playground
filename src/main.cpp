@@ -1,4 +1,5 @@
 #include <list>
+#include <memory>
 
 #include "camera.hpp"
 #include "intersectables/intersectable.hpp"
@@ -23,32 +24,28 @@ int main () {
     Color blueish = {{0.3, 0.3, 0.7}};
     Color yellowish = {{0.8, 0.8, 0.0}};
 
-    Metallic greenish_metal = {greenish, 1};
-    Sphere metal_sphere_1 = {
+    Sphere metal_sphere_1 {
         {{-1.0, 0, 2.0}},
         0.5,
-        greenish_metal
+        std::make_unique<Metallic>(greenish, 1)
     };
 
-    Metallic pinkish_metal = {pinkish, 0.5};
     Sphere metal_sphere_2 = {
         {{0, 0, 2.0}},
         0.5,
-        pinkish_metal
+        std::make_unique<Metallic>(pinkish, 0.5)
     };
 
-    Metallic blueish_metal = {blueish, 0};
     Sphere metal_sphere_3 = {
         {{1.0, 0, 2.0}},
         0.5,
-        blueish_metal
+        std::make_unique<Metallic>(blueish, 0)
     };
 
-    Diffuse yellowish_diffuse = {yellowish};
     Plane diffuse_plane = {
         {{0, -0.5, 0}},
         {{0, 1, 0}},
-        yellowish_diffuse
+        std::make_unique<Diffuse>(yellowish)
     };
 
     std::list<Intersectable*> objects = {
