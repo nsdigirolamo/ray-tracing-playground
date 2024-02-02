@@ -10,3 +10,9 @@ void compare_hit (const Hit& lhs, const Hit& rhs) {
     CHECK(lhs.distance == Approx(rhs.distance));
     compare_ray(lhs.surface_normal, rhs.surface_normal);
 }
+
+void compare_color (const Color& lhs, const Color& rhs) {
+    for (int row = 0; row < 3; ++row) {
+        CHECK(lhs[row] == Approx(rhs[row]));
+    }
+}
