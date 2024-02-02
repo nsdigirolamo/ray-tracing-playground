@@ -220,11 +220,5 @@ Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, int
         return 0 < steps ? hadamard(material_color, traced_color) : material_color;
     }
 
-    Color sky = {{
-        0.60,
-        0.90,
-        1.0
-    }};
-
-    return sky;
+    return SKYBLUE;
 }
