@@ -190,37 +190,34 @@ std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const
 
 Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, int steps) {
 
-    std::optional<Hit> closest_hit = {};
-    const Material* material;
+    std::optional<std::tuple<Intersectable*, Hit>> closest = {};
 
     for (auto it = intersectables.begin(); it != intersectables.end(); ++it) {
 
         std::optional<Hit> hit = (*it)->intersects(ray);
 
-        bool hit_is_closest = hit && closest_hit && hit.value().distance < closest_hit.value().distance;
+        bool hit_is_closest = \
+            hit.has_value() && \
+            closest.has_value() && \
+            hit.value().distance < std::get<Hit>(closest.value()).distance;
 
-        if (hit && (!closest_hit || hit_is_closest)) {
-
-            closest_hit.emplace(hit.value());
-            material = (*it)->getMaterial();
+        if (hit.has_value() && (!closest.has_value() || hit_is_closest)) {
+            closest.emplace(*it, hit.value());
         }
     }
 
-    if (closest_hit) {
+    if (closest.has_value()) {
 
-        Hit hit = closest_hit.value();
-        Color color = material->getColor();
+        Hit hit = std::get<Hit>(closest.value());
+        Intersectable* intersectable = std::get<Intersectable*>(closest.value());
+        const Material& material = intersectable->getMaterial();
+
+        Color material_color = material.getColor();
+        Color traced_color = trace(material.scatter(hit), intersectables, steps);
 
         --steps;
 
-        if (0 < steps) {
-            return hadamard(
-                color,
-                trace(material->scatter(hit), intersectables, steps)
-            );
-        }
-
-        return color;
+        return 0 < steps ? hadamard(material_color, traced_color) : material_color;
     }
 
     Color sky = {{
