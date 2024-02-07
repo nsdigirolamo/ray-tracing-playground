@@ -10,6 +10,8 @@ class Material {
 
     public:
 
+        virtual ~Material () {};
+
         virtual Color getColor () const = 0;
         virtual Ray scatter (const Hit& hit) const = 0;
 };
