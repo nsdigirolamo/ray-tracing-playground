@@ -138,7 +138,7 @@ Ray Camera::generate_ray (const int row, const int col) const {
     double x_position = col * pixel_width;
     double y_position = row * pixel_height;
 
-    Vector<2> offset = randomPointInUnitCircle();
+    Vector<2> offset = randomInUnitCircle();
     double sample_x_offset = offset[0] * pixel_width;
     double sample_y_offset = offset[1] * pixel_height;
 

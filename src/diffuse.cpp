@@ -9,6 +9,6 @@ Color Diffuse::getColor () const {
 Ray Diffuse::scatter (const Hit &hit) const {
     return {
         hit.surface_normal.origin,
-        hit.surface_normal.direction + randomPointOnUnitSphere()
+        hit.surface_normal.direction + randomOnUnitSphere()
     };
 }
