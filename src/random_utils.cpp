@@ -7,7 +7,7 @@ double randomDouble () {
     return distribution(generator);
 }
 
-Point randomPointInUnitSphere () {
+Vector<3> randomInUnitSphere () {
 
     double x, y, z;
     Point point;
@@ -25,21 +25,20 @@ Point randomPointInUnitSphere () {
     return point;
 }
 
-Point randomPointOnUnitSphere () {
-    return unit(randomPointInUnitSphere());
+UnitVector<3> randomOnUnitSphere () {
+    return (UnitVector<3>)(randomInUnitSphere());
 }
 
-Point randomPointInUnitHemisphere (const Vector<3>& normal) {
-
-    Point in_sphere = randomPointInUnitSphere();
+Vector<3> randomInUnitHemisphere (const UnitVector<3>& normal) {
+    Point in_sphere = randomInUnitSphere();
     return dot(normal, in_sphere) > 0 ? in_sphere : -1 * in_sphere;
 }
 
-Point randomPointOnUnitHemisphere (const Vector<3>& normal) {
-    return unit(randomPointInUnitHemisphere(normal));
+UnitVector<3> randomPointOnUnitHemisphere (const UnitVector<3>& normal) {
+    return (UnitVector<3>)(randomInUnitHemisphere(normal));
 }
 
-Vector<2> randomPointInUnitCircle () {
+Vector<2> randomInUnitCircle () {
 
     double x, y;
     Vector<2> point;
@@ -56,6 +55,6 @@ Vector<2> randomPointInUnitCircle () {
     return point;
 }
 
-Vector<2> randomPointOnUnitCircle () {
-    return unit(randomPointInUnitCircle());
+UnitVector<2> randomOnUnitCircle () {
+    return (UnitVector<2>)(randomInUnitCircle());
 }
