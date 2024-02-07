@@ -10,7 +10,7 @@ Sphere::Sphere (const Point& origin, double radius, std::unique_ptr<Material> ma
 
 std::optional<Hit> Sphere::intersects(const Ray& ray) const {
 
-    Vector<3> ud = unit(ray.direction);
+    UnitVector<3> ud = ray.direction;
     Vector<3> oc = ray.origin - this->origin;
 
     double discriminant = pow(dot(ud, oc), 2) - (dot(oc, oc) - pow(this->radius, 2));

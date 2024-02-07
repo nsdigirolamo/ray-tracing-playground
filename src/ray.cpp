@@ -2,8 +2,8 @@
 
 Ray::Ray (
     const Point& origin,
-    const Vector<3>& direction
+    const UnitVector<3>& direction
 )
     : origin(origin)
-    , direction(unit(direction))
+    , direction(direction)
 { }
