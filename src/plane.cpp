@@ -2,9 +2,9 @@
 
 const double minimum_distance = 0.0001;
 
-Plane::Plane (const Point& origin, const Vector<3>& normal, std::unique_ptr<Material> material)
+Plane::Plane (const Point& origin, const UnitVector<3>& normal, std::unique_ptr<Material> material)
     : origin(origin)
-    , normal(unit(normal))
+    , normal(normal)
     , material(std::move(material))
 { }
 
