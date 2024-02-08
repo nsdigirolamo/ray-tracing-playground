@@ -23,7 +23,12 @@ std::optional<Hit> Plane::intersects (const Ray &ray) const {
 
         Point intersection = ray.direction * distance + ray.origin;
         Ray surface_normal = {intersection, this->normal};
-        Hit hit = {ray.direction, distance, surface_normal};
+        Hit hit = {
+            ray.direction, 
+            distance,
+            surface_normal,
+            dot(ray.direction, surface_normal.direction) <= 0
+        };
 
         return hit;
     }
