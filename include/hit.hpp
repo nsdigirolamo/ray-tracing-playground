@@ -10,6 +10,7 @@ class Hit {
     const UnitVector<3> incoming;
     const double distance;
     const Ray surface_normal;
+    const bool is_front;
 };
 
 #endif
