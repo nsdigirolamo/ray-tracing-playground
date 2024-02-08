@@ -7,6 +7,7 @@
 #include "intersectables/sphere.hpp"
 #include "materials/diffuse.hpp"
 #include "materials/metallic.hpp"
+#include "materials/refractive.hpp"
 #include "primitives/vector.hpp"
 
 int main () {
@@ -19,22 +20,28 @@ int main () {
         0
     };
 
-    Sphere metal_sphere_1 {
-        {{-1.0, 0, 2.0}},
-        0.5,
-        std::make_unique<Metallic>(GREENYELLOW, 1)
-    };
-
-    Sphere metal_sphere_2 = {
+    Sphere refractive1 = {
         {{0, 0, 2.0}},
         0.5,
-        std::make_unique<Metallic>(HOTPINK, 0.5)
+        std::make_unique<Refractive>(WHITE, 1.5)
     };
 
-    Sphere metal_sphere_3 = {
-        {{1.0, 0, 2.0}},
+    Sphere diffuse1 = {
+        {{-2.0, 0, 9.0}},
         0.5,
-        std::make_unique<Metallic>(LIGHTSEAGREEN, 0)
+        std::make_unique<Diffuse>(RED)
+    };
+
+    Sphere diffuse2 = {
+        {{0, 0, 9.0}},
+        0.5,
+        std::make_unique<Diffuse>(GREEN)
+    };
+
+    Sphere diffuse3 = {
+        {{2.0, 0, 9.0}},
+        0.5,
+        std::make_unique<Diffuse>(BLUE)
     };
 
     Plane diffuse_plane = {
@@ -44,9 +51,10 @@ int main () {
     };
 
     std::list<Intersectable*> objects = {
-        &metal_sphere_1,
-        &metal_sphere_2,
-        &metal_sphere_3,
+        &refractive1,
+        &diffuse1,
+        &diffuse2,
+        &diffuse3,
         &diffuse_plane
     };
 
