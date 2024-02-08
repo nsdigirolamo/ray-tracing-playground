@@ -55,6 +55,11 @@ double length (Vector<height> v) {
 }
 
 template <unsigned int height>
+double length_squared(Vector<height> v) {
+    return dot(v, v);
+}
+
+template <unsigned int height>
 Vector<height> unit (const Vector<height>& v) {
     return v / length(v);
 }
@@ -63,6 +68,19 @@ template <unsigned int height>
 Vector<height> reflect (const Vector<height>& vector, const Vector<height>& surface_normal) {
     Vector<height> normal = unit(surface_normal);
     return vector - 2 * dot(vector, normal) * normal;
+}
+
+template <unsigned int height>
+Vector<height> refract (const Vector<height>& vector, const Vector<height>& surface_normal, const double refractive_index) {
+
+    Vector<height> v = unit(vector);
+    Vector<height> n = unit(surface_normal);
+
+    double cos_theta = dot((Vector<3>)(-1.0 * v), n);
+    Vector<3> normal_orthogonal = refractive_index * (v + cos_theta * n);
+    Vector<3> normal_parallel = -1.0 * sqrt(fabs(1.0 - length_squared(normal_orthogonal))) * n;
+
+    return normal_orthogonal + normal_parallel;
 }
 
 using Point = Vector<3>;
