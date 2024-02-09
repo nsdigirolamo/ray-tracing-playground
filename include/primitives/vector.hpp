@@ -49,6 +49,13 @@ double dot (const Vector<height>& lhs, const Vector<height>& rhs) {
     return dot_product;
 }
 
+#define cross(lhs, rhs) \
+    {{ \
+        lhs[1] * rhs[2] - lhs[2] * rhs[1], \
+        lhs[2] * rhs[0] - lhs[0] * rhs[2], \
+        lhs[0] * rhs[1] - lhs[1] * rhs[0], \
+    }}
+
 template <unsigned int height>
 double length (Vector<height> v) {
     return sqrtf(dot(v, v));
