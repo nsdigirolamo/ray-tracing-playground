@@ -27,31 +27,77 @@ class Camera {
         double view_height;
         double view_width;
         double focal_length;
+        double focal_radius;
 
         double pixel_height;
         double pixel_width;
 
-        Matrix<3, 3> rotation_matrix;
+        UnitVector<3> up_direction;
+        UnitVector<3> view_direction;
+        UnitVector<3> view_vert;
+        UnitVector<3> view_horz;
+
+        void helpConstruct (
+            const Point& location,
+            const int image_height,
+            const int image_width,
+            const double horizontal_fov,
+            const double focal_length,
+            const double focal_angle,
+            const Point& looking_at,
+            const UnitVector<3>& up_direction
+        );
 
     public:
-
-        Camera ();
 
         Camera (
             const Point& location,
             const int image_height,
             const int image_width,
             const double horizontal_fov,
-            const double yaw
+            const double vertical_fov,
+            const double focal_length,
+            const double focal_angle,
+            const Point& looking_at,
+            const UnitVector<3>& up_direction
         );
 
         Camera (
             const Point& location,
             const int image_height,
             const int image_width,
-            const double vertical_fov,
             const double horizontal_fov,
-            const double yaw
+            const double focal_length,
+            const double focal_angle,
+            const Point& looking_at,
+            const UnitVector<3>& up_direction
+        );
+
+        Camera (
+            const Point& location,
+            const int image_height,
+            const int image_width,
+            const double horizontal_fov,
+            const double focal_length,
+            const double focal_angle,
+            const Point& looking_at
+        );
+
+        Camera (
+            const Point& location,
+            const int image_height,
+            const int image_width,
+            const double horizontal_fov,
+            const double focal_length,
+            const Point& looking_at
+        );
+
+        Camera (
+            const Point& location,
+            const int image_height,
+            const int image_width,
+            const double horizontal_fov,
+            const Point& looking_at
         );
 
         Point getLocation () const;
@@ -68,8 +114,6 @@ class Camera {
 
         double getPixelHeight () const;
         double getPixelWidth () const;
-
-        Matrix<3, 3> getRotationMatrix () const;
 
         Ray generate_ray (const int x, const int y) const;
         std::vector<Color> capture (const std::list<Intersectable*> scene, const int samples_per_pixel, const int steps_per_sample) const;

@@ -1,27 +1,30 @@
 #include "camera.hpp"
 
-const Point default_location = {{0, 0, 0}};
-constexpr int default_image_height = 1080;
-constexpr int default_image_width = 1920;
-constexpr double default_horizontal_fov = 90.0;
-constexpr double default_yaw = 0.0;
-
-double to_radians (double degrees) {
-    return degrees * M_PI / 180;
-}
-
-double to_degrees (double radians) {
-    return radians * 180 / M_PI;
-}
-
-Camera::Camera () {
-    *this = {
-        default_location,
-        default_image_height,
-        default_image_width,
-        default_horizontal_fov,
-        default_yaw
-    };
+#define to_radians(degrees) ((double)(degrees) * M_PI / 180.0)
+#define to_degrees(radians) ((double)(radians) * 180.0 / M_PI)
+    
+void Camera::helpConstruct (
+    const Point& location,
+    const int image_height,
+    const int image_width,
+    const double horizontal_fov,
+    const double focal_length,
+    const double focal_angle,
+    const Point& looking_at,
+    const UnitVector<3>& up_direction
+) {
+    this->location = location;
+    this->image_height = image_height;
+    this->image_width = image_width;
+    this->horizontal_fov = horizontal_fov;
+    this->focal_length = focal_length;
+    this->focal_radius = focal_length * tan(focal_angle / 2.0);
+    this->view_direction = looking_at - this->location;
+    this->up_direction = up_direction;
+    this->view_horz = cross(up_direction, view_direction);
+    this->view_vert = cross(view_direction, view_horz);
+    this->view_width = 2.0 * this->focal_length * tan(to_radians(this->horizontal_fov) / 2);
+    this->pixel_width = this->view_width / this->image_width;
 }
 
 Camera::Camera (
@@ -29,65 +32,108 @@ Camera::Camera (
     const int image_height,
     const int image_width,
     const double horizontal_fov,
-    const double yaw
-)
-    : location(location)
-    , image_height(image_height)
-    , image_width(image_width)
-    , horizontal_fov(horizontal_fov)
-{
-    double hfov = to_radians(horizontal_fov);
-
-    this->view_width = 2 * sin(hfov / 2);
-    this->view_height = this->view_width * image_height / image_width;
-    this->focal_length = cos(hfov / 2);
-
-    this->pixel_height = this->view_height / this->image_height;
-    this->pixel_width = this->view_width / this->image_width;
-
-    double vfov = atan((this->view_height / 2) / this->focal_length);
-
-    this->vertical_fov = to_degrees(vfov) * 2;
-
-    const double radians_yaw = to_radians(yaw);
-    this->rotation_matrix = {{
-        {       cos(radians_yaw), 0, sin(radians_yaw) },
-        {                     0,  1,                0 },
-        {-1.0 * sin(radians_yaw), 0, cos(radians_yaw) }
-    }};
-}
-
-Camera::Camera (
-    const Point& location,
-    const int image_height,
-    const int image_width,
     const double vertical_fov,
-    const double horizontal_fov,
-    const double yaw
-)
-    : location(location)
-    , image_height(image_height)
-    , image_width(image_width)
-    , vertical_fov(vertical_fov)
-    , horizontal_fov(horizontal_fov)
-{
-    double hfov = to_radians(horizontal_fov);
-    double vfov = to_radians(vertical_fov);
-
-    this->view_height = 2 * sin(vfov / 2);
-    this->focal_length = cos(vfov / 2);
-    this->view_width = 2 * this->focal_length * tan(hfov / 2);
-
+    const double focal_length,
+    const double focal_angle,
+    const Point& looking_at,
+    const UnitVector<3>& up_direction
+) {
+    helpConstruct (
+        location,
+        image_height,
+        image_width,
+        horizontal_fov,
+        focal_length,
+        focal_angle,
+        looking_at,
+        up_direction
+    );
+    this->view_height = 2.0 * this->focal_length * tan(to_radians(this->vertical_fov) / 2.0);
     this->pixel_height = this->view_height / this->image_height;
-    this->pixel_width = this->view_width / this->image_width;
-
-    const double radians_yaw = to_radians(yaw);
-    this->rotation_matrix = {{
-        {       cos(radians_yaw), 0, sin(radians_yaw) },
-        {                      0, 1,                0 },
-        {-1.0 * sin(radians_yaw), 0, cos(radians_yaw) }
-    }};
+    this->vertical_fov = vertical_fov;
 }
+
+Camera::Camera (
+    const Point& location,
+    const int image_height,
+    const int image_width,
+    const double horizontal_fov,
+    const double focal_length,
+    const double focal_angle,
+    const Point& looking_at,
+    const UnitVector<3>& up_direction
+) {
+    helpConstruct(
+        location,
+        image_height,
+        image_width,
+        horizontal_fov,
+        focal_length,
+        focal_angle,
+        looking_at,
+        up_direction
+    );
+    this->view_height = this->view_width * image_height / image_width;
+    this->pixel_height = this->view_height / this->image_height;
+    this->vertical_fov = to_degrees(atan((this->view_height / 2.0) / this->focal_length) * 2.0);
+}
+
+Camera::Camera (
+    const Point& location,
+    const int image_height,
+    const int image_width,
+    const double horizontal_fov,
+    const double focal_length,
+    const double focal_angle,
+    const Point& looking_at
+) 
+    : Camera (
+        location,
+        image_height,
+        image_width,
+        horizontal_fov,
+        focal_length,
+        focal_angle,
+        looking_at,
+        {{0.0, 1.0, 0.0}}
+    )
+{ }
+
+Camera::Camera (
+    const Point& location,
+    const int image_height,
+    const int image_width,
+    const double horizontal_fov,
+    const double focal_length,
+    const Point& looking_at
+)
+    : Camera (
+        location,
+        image_height,
+        image_width,
+        horizontal_fov,
+        focal_length,
+        0,
+        looking_at
+    )
+{ }
+
+Camera::Camera (
+    const Point& location,
+    const int image_height,
+    const int image_width,
+    const double horizontal_fov,
+    const Point& looking_at
+)
+    : Camera (
+        location,
+        image_height,
+        image_width,
+        horizontal_fov,
+        length((Vector<3>)(looking_at - location)),
+        looking_at
+    )
+{ }
 
 Point Camera::getLocation () const {
     return this->location;
@@ -129,32 +175,29 @@ double Camera::getPixelWidth () const {
     return this->pixel_width;
 }
 
-Matrix<3, 3> Camera::getRotationMatrix () const {
-    return this->rotation_matrix;
-}
-
 Ray Camera::generate_ray (const int row, const int col) const {
 
     double x_position = col * pixel_width;
     double y_position = row * pixel_height;
 
-    Vector<2> offset = randomInUnitCircle();
-    double sample_x_offset = offset[0] * pixel_width;
-    double sample_y_offset = offset[1] * pixel_height;
+    Vector<2> sample_offset = randomInUnitCircle();
+    double sample_x_offset = sample_offset[0] * pixel_width;
+    double sample_y_offset = sample_offset[1] * pixel_height;
 
     double global_x_offset = this->view_width / 2;
     double global_y_offset = this->view_height / 2;
 
-    Vector<3> view_direction {{
-        x_position + sample_x_offset - global_x_offset,
-        y_position + sample_y_offset - global_y_offset,
-        this->focal_length
-    }};
+    Vector<3> view_direction {
+        this->view_horz * (x_position + sample_x_offset - global_x_offset) + \
+        this->view_vert * (y_position + sample_y_offset - global_y_offset) + \
+        this->view_direction * (this->focal_length)
+    };
 
-    view_direction = this->rotation_matrix.transform(view_direction);
+    Vector<2> focus_offset = this->focal_radius * randomInUnitCircle();
+    Point location = this->location + (this->view_horz * focus_offset[0]) + (this->view_vert * focus_offset[1]);
 
     return {
-        this->location,
+        location,
         view_direction
     };
 }
@@ -162,9 +205,6 @@ Ray Camera::generate_ray (const int row, const int col) const {
 std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const int samples_per_pixel, const int steps_per_sample) const {
 
     std::cout << "Rendering image...\n";
-
-    const double pixel_height = this->view_height / this->image_height;
-    const double pixel_width = this->view_width / this->image_width;
 
     std::vector<Color> pixels (this->image_width * this->image_height);
 
