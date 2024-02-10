@@ -10,14 +10,13 @@ TEST_CASE ("camera initializes correctly") {
                 int image_height = 1080;
                 int image_width = 1920;
                 double horizontal_fov = 90;
-                double yaw = 0;
 
                 Camera camera {
                     location,
                     image_height,
                     image_width,
                     horizontal_fov,
-                    yaw
+                    {{0.0, 0.0, 0.70711}}
                 };
 
             WHEN ("the camera is initialized with a 90 degree FOV") {
@@ -26,7 +25,6 @@ TEST_CASE ("camera initializes correctly") {
                 double view_width = 1.41421;
                 double view_height = 0.79550;
                 double focal_length = 0.70711;
-                Matrix<3, 3> rotation_identity = identity(camera.getRotationMatrix());
 
                 THEN ("the vertical FOV is properly calculated") {
 
@@ -43,10 +41,6 @@ TEST_CASE ("camera initializes correctly") {
                 } AND_THEN ("the focal length is properly calculated") {
 
                     CHECK(camera.getFocalLength() == Approx(focal_length));
-
-                } AND_THEN ("the rotation matrix is the identity matrix") {
-
-                    compare_matrix(camera.getRotationMatrix(), rotation_identity);
 
                 }
             }
