@@ -17,49 +17,70 @@ int main () {
         1080,
         1920,
         90,
-        2.0,
-        0.0,
-        {{0, 0, 2.0}}
-    };
-
-    Sphere refractive1 = {
-        {{0, 0, 2.0}},
-        0.5,
-        std::make_unique<Refractive>(WHITE, 1.5)
+        10.0,
+        10.0,
+        {{0, 0, 10}}
     };
 
     Sphere diffuse1 = {
-        {{-2.0, 0, 9.0}},
-        0.5,
+        {{5, 0, 5}},
+        1.0,
         std::make_unique<Diffuse>(RED)
     };
 
     Sphere diffuse2 = {
-        {{0, 0, 9.0}},
-        0.5,
+        {{0, 0, 10}},
+        1.0,
         std::make_unique<Diffuse>(GREEN)
     };
 
     Sphere diffuse3 = {
-        {{2.0, 0, 9.0}},
-        0.5,
+        {{-5, 0, 15}},
+        1.0,
         std::make_unique<Diffuse>(BLUE)
     };
 
+    Sphere diffuse4 = {
+        {{-10, 0, 20}},
+        1.0,
+        std::make_unique<Diffuse>(YELLOW)
+    };
+
+    Sphere diffuse5 = {
+        {{-15, 0, 25}},
+        1.0,
+        std::make_unique<Diffuse>(MAGENTA)
+    };
+
+    Sphere diffuse6 = {
+        {{-20, 0, 30}},
+        1.0,
+        std::make_unique<Diffuse>(CYAN)
+    };
+
+    Sphere diffuse7 = {
+        {{-25, 0, 35}},
+        1.0,
+        std::make_unique<Diffuse>(MAGENTA)
+    };
+
     Plane diffuse_plane = {
-        {{0, -0.5, 0}},
+        {{0, -1.0, 0}},
         {{0, 1, 0}},
         std::make_unique<Diffuse>(CORAL)
     };
 
     std::list<Intersectable*> objects = {
-        &refractive1,
         &diffuse1,
         &diffuse2,
         &diffuse3,
+        &diffuse4,
+        &diffuse5,
+        &diffuse6,
+        &diffuse7,
         &diffuse_plane
     };
 
-    std::vector<Color> pixels = camera.capture(objects, 50, 100);
+    std::vector<Color> pixels = camera.capture(objects, 100, 100);
     writeImage("scene", pixels, camera.getImageHeight(), camera.getImageWidth());
 }

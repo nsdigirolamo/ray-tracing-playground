@@ -2,7 +2,7 @@
 
 #define to_radians(degrees) ((double)(degrees) * M_PI / 180.0)
 #define to_degrees(radians) ((double)(radians) * 180.0 / M_PI)
-    
+
 void Camera::helpConstruct (
     const Point& location,
     const int image_height,
@@ -14,16 +14,20 @@ void Camera::helpConstruct (
     const UnitVector<3>& up_direction
 ) {
     this->location = location;
+
     this->image_height = image_height;
     this->image_width = image_width;
     this->horizontal_fov = horizontal_fov;
-    this->focal_length = focal_length;
-    this->focal_radius = focal_length * tan(focal_angle / 2.0);
+
+    this->focal_distance = focal_length;
+    this->focal_radius = focal_length * tan(to_radians(focal_angle) / 2.0);
+
     this->view_direction = looking_at - this->location;
     this->up_direction = up_direction;
-    this->view_horz = cross(up_direction, view_direction);
-    this->view_vert = cross(view_direction, view_horz);
-    this->view_width = 2.0 * this->focal_length * tan(to_radians(this->horizontal_fov) / 2);
+    this->view_horz = cross(view_direction, up_direction);
+    this->view_vert = cross(view_horz, view_direction);
+
+    this->view_width = 2.0 * this->focal_distance * tan(to_radians(this->horizontal_fov) / 2.0);
     this->pixel_width = this->view_width / this->image_width;
 }
 
@@ -48,7 +52,7 @@ Camera::Camera (
         looking_at,
         up_direction
     );
-    this->view_height = 2.0 * this->focal_length * tan(to_radians(this->vertical_fov) / 2.0);
+    this->view_height = 2.0 * this->focal_distance * tan(to_radians(this->vertical_fov) / 2.0);
     this->pixel_height = this->view_height / this->image_height;
     this->vertical_fov = vertical_fov;
 }
@@ -75,7 +79,7 @@ Camera::Camera (
     );
     this->view_height = this->view_width * image_height / image_width;
     this->pixel_height = this->view_height / this->image_height;
-    this->vertical_fov = to_degrees(atan((this->view_height / 2.0) / this->focal_length) * 2.0);
+    this->vertical_fov = to_degrees(atan((this->view_height / 2.0) / this->focal_distance) * 2.0);
 }
 
 Camera::Camera (
@@ -86,7 +90,7 @@ Camera::Camera (
     const double focal_length,
     const double focal_angle,
     const Point& looking_at
-) 
+)
     : Camera (
         location,
         image_height,
@@ -164,7 +168,7 @@ double Camera::getViewWidth () const {
 }
 
 double Camera::getFocalLength () const {
-    return this->focal_length;
+    return this->focal_distance;
 }
 
 double Camera::getPixelHeight () const {
@@ -175,30 +179,29 @@ double Camera::getPixelWidth () const {
     return this->pixel_width;
 }
 
-Ray Camera::generate_ray (const int row, const int col) const {
+Point Camera::generateRayOrigin () const {
+    Vector<2> focus_offset = randomInUnitCircle();
+    return this->location +
+        (focus_offset[0] * this->focal_radius * this->view_horz) +
+        (focus_offset[1] * this->focal_radius * this->view_vert);
+}
 
-    double x_position = col * pixel_width;
-    double y_position = row * pixel_height;
+Point Camera::generateRelativePixelLocation (const int row, const int col) const {
 
-    Vector<2> sample_offset = randomInUnitCircle();
-    double sample_x_offset = sample_offset[0] * pixel_width;
-    double sample_y_offset = sample_offset[1] * pixel_height;
+    double x_pos = col * this->pixel_width + (0.5 * this->pixel_width);
+    double y_pos = row * this->pixel_height + (0.5 * this->pixel_height);
 
-    double global_x_offset = this->view_width / 2;
-    double global_y_offset = this->view_height / 2;
+    Vector<2> r = randomInUnitCircle();
+    double random_x_offset = r[0] * this->pixel_width;
+    double random_y_offset = r[1] * this->pixel_height;
 
-    Vector<3> view_direction {
-        this->view_horz * (x_position + sample_x_offset - global_x_offset) + \
-        this->view_vert * (y_position + sample_y_offset - global_y_offset) + \
-        this->view_direction * (this->focal_length)
-    };
-
-    Vector<2> focus_offset = this->focal_radius * randomInUnitCircle();
-    Point location = this->location + (this->view_horz * focus_offset[0]) + (this->view_vert * focus_offset[1]);
+    double global_x_offset = this->view_width / 2.0;
+    double global_y_offset = this->view_height / 2.0;
 
     return {
-        location,
-        view_direction
+        this->view_horz * (x_pos + random_x_offset - global_x_offset) +
+        this->view_vert * (y_pos + random_y_offset - global_y_offset) +
+        this->view_direction * this->focal_distance
     };
 }
 
@@ -214,7 +217,11 @@ std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const
             Color color = {{0, 0, 0}};
 
             for (int sample = 0; sample < samples_per_pixel; ++sample) {
-                Ray ray = this->generate_ray(row, col);
+
+                Point origin = this->generateRayOrigin();
+                UnitVector<3> direction = this->generateRelativePixelLocation(row, col) - origin;
+
+                Ray ray { origin, direction };
                 color += trace(ray, scene, steps_per_sample);
             }
 

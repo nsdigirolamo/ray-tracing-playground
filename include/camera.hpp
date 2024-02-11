@@ -26,7 +26,7 @@ class Camera {
 
         double view_height;
         double view_width;
-        double focal_length;
+        double focal_distance;
         double focal_radius;
 
         double pixel_height;
@@ -47,6 +47,9 @@ class Camera {
             const Point& looking_at,
             const UnitVector<3>& up_direction
         );
+
+        Point generateRayOrigin () const;
+        Point generateRelativePixelLocation (const int row, const int col) const;
 
     public:
 
