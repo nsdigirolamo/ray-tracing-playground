@@ -7,6 +7,8 @@
 #include "materials/material.hpp"
 #include "ray.hpp"
 
+#define MINIMUM_INTERSECT_DISTANCE 0.0001
+
 class Intersectable {
 
     public:
