@@ -8,6 +8,7 @@
 
 #include "intersectables/intersectable.hpp"
 #include "primitives/color.hpp"
+#include "primitives/unit_vector.hpp"
 #include "primitives/vector.hpp"
 #include "random_utils.hpp"
 #include "ray.hpp"
@@ -34,8 +35,8 @@ class Camera {
 
         UnitVector<3> up_direction;
         UnitVector<3> view_direction;
-        UnitVector<3> view_vert;
-        UnitVector<3> view_horz;
+        UnitVector<3> view_vertical;
+        UnitVector<3> view_horizontal;
 
         void helpConstruct (
             const Point& location,
@@ -49,7 +50,7 @@ class Camera {
         );
 
         Point generateRayOrigin () const;
-        Point generateRelativePixelLocation (const int row, const int col) const;
+        Point calculatePixelLocation (const int row, const int col) const;
 
     public:
 
@@ -113,12 +114,17 @@ class Camera {
 
         double getViewHeight () const;
         double getViewWidth () const;
-        double getFocalLength () const;
+        double getFocalDistance () const;
+        double getFocalRadius () const;
 
         double getPixelHeight () const;
         double getPixelWidth () const;
 
-        Ray generate_ray (const int x, const int y) const;
+        UnitVector<3> getUpDirection () const;
+        UnitVector<3> getViewDirection () const;
+        UnitVector<3> getViewVertical () const;
+        UnitVector<3> getViewHorizontal () const;
+
         std::vector<Color> capture (const std::list<Intersectable*> scene, const int samples_per_pixel, const int steps_per_sample) const;
 };
 

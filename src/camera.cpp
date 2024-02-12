@@ -24,8 +24,8 @@ void Camera::helpConstruct (
 
     this->view_direction = looking_at - this->location;
     this->up_direction = up_direction;
-    this->view_horz = cross(view_direction, up_direction);
-    this->view_vert = cross(view_horz, view_direction);
+    this->view_horizontal = cross(view_direction, up_direction);
+    this->view_vertical = cross(view_horizontal, view_direction);
 
     this->view_width = 2.0 * this->focal_distance * tan(to_radians(this->horizontal_fov) / 2.0);
     this->pixel_width = this->view_width / this->image_width;
@@ -167,8 +167,12 @@ double Camera::getViewWidth () const {
     return this->view_width;
 }
 
-double Camera::getFocalLength () const {
+double Camera::getFocalDistance () const {
     return this->focal_distance;
+}
+
+double Camera::getFocalRadius () const {
+    return this->focal_radius;
 }
 
 double Camera::getPixelHeight () const {
@@ -179,30 +183,48 @@ double Camera::getPixelWidth () const {
     return this->pixel_width;
 }
 
-Point Camera::generateRayOrigin () const {
-    Vector<2> focus_offset = randomInUnitCircle();
-    return this->location +
-        (focus_offset[0] * this->focal_radius * this->view_horz) +
-        (focus_offset[1] * this->focal_radius * this->view_vert);
+UnitVector<3> Camera::getUpDirection () const {
+    return this->up_direction;
 }
 
-Point Camera::generateRelativePixelLocation (const int row, const int col) const {
+UnitVector<3> Camera::getViewDirection () const {
+    return this->view_direction;
+}
 
-    double x_pos = col * this->pixel_width + (0.5 * this->pixel_width);
-    double y_pos = row * this->pixel_height + (0.5 * this->pixel_height);
+UnitVector<3> Camera::getViewVertical () const {
+    return this->view_vertical;
+}
 
-    Vector<2> r = randomInUnitCircle();
-    double random_x_offset = r[0] * this->pixel_width;
-    double random_y_offset = r[1] * this->pixel_height;
+UnitVector<3> Camera::getViewHorizontal () const {
+    return this->view_horizontal;
+}
+
+Point Camera::generateRayOrigin () const {
+    Vector<2> offset = randomInUnitCircle();
+    return this->location +
+        (offset[0] * this->focal_radius * this->view_horizontal) +
+        (offset[1] * this->focal_radius * this->view_vertical);
+}
+
+Point Camera::calculatePixelLocation (const int row, const int col) const {
+
+    double x = col * this->pixel_width + (0.5 * this->pixel_width);
+    double y = row * this->pixel_height + (0.5 * this->pixel_height);
+
+    Vector<2> random_offset = randomInUnitCircle();
+    double random_x_offset = random_offset[0] * this->pixel_width;
+    double random_y_offset = random_offset[1] * this->pixel_height;
 
     double global_x_offset = this->view_width / 2.0;
     double global_y_offset = this->view_height / 2.0;
 
-    return {
-        this->view_horz * (x_pos + random_x_offset - global_x_offset) +
-        this->view_vert * (y_pos + random_y_offset - global_y_offset) +
-        this->view_direction * this->focal_distance
-    };
+    x += random_x_offset - global_x_offset;
+    y += random_y_offset - global_y_offset;
+
+    return
+        this->view_horizontal * x +
+        this->view_vertical * y +
+        this->view_direction * this->focal_distance;
 }
 
 std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const int samples_per_pixel, const int steps_per_sample) const {
@@ -219,7 +241,7 @@ std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const
             for (int sample = 0; sample < samples_per_pixel; ++sample) {
 
                 Point origin = this->generateRayOrigin();
-                UnitVector<3> direction = this->generateRelativePixelLocation(row, col) - origin;
+                UnitVector<3> direction = this->calculatePixelLocation(row, col) - origin;
 
                 Ray ray { origin, direction };
                 color += trace(ray, scene, steps_per_sample);
@@ -227,6 +249,7 @@ std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const
 
             pixels[(row * this->image_width) + col] = color / samples_per_pixel;
         }
+
         std::cout << row << " lines remaining...\n";
     }
 
@@ -243,9 +266,9 @@ Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, int
 
         std::optional<Hit> hit = (*it)->intersects(ray);
 
-        bool hit_is_closest = \
-            hit.has_value() && \
-            closest.has_value() && \
+        bool hit_is_closest =
+            hit.has_value() &&
+            closest.has_value() &&
             hit.value().distance < std::get<Hit>(closest.value()).distance;
 
         if (hit.has_value() && (!closest.has_value() || hit_is_closest)) {
