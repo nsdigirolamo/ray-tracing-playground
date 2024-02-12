@@ -16,10 +16,19 @@ std::optional<Hit> Sphere::intersects(const Ray& ray) const {
     if (0 <= discriminant) {
 
         double uoc = -1 * dot(ray.direction, (Vector<3>)(ray.origin - this->origin));
-        double distance = uoc - sqrt(discriminant);
-        distance = distance < 0 ? uoc + sqrt(discriminant) : distance;
 
-        if (distance < MINIMUM_INTERSECT_DISTANCE) { return {}; }
+        double distance;
+
+        double smaller_distance = uoc - sqrt(discriminant);
+        double larger_distance = uoc + sqrt(discriminant);
+
+        if (MINIMUM_INTERSECT_DISTANCE < smaller_distance) {
+            distance = smaller_distance;
+        } else if (MINIMUM_INTERSECT_DISTANCE < larger_distance) {
+            distance = larger_distance;
+        } else {
+            return {};
+        }
 
         Point intersection = ray.origin + ray.direction * distance;
         UnitVector<3> normal_direction = intersection - this->origin;
