@@ -281,13 +281,16 @@ Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, int
         Hit hit = std::get<Hit>(closest.value());
         Intersectable* intersectable = std::get<Intersectable*>(closest.value());
         const Material& material = intersectable->getMaterial();
-
         Color material_color = material.getColor();
-        Color traced_color = trace(material.scatter(hit), intersectables, steps);
 
         --steps;
 
-        return 0 < steps ? hadamard(material_color, traced_color) : material_color;
+        if (0 < steps) {
+            Color traced_color = trace(material.scatter(hit), intersectables, steps);
+            return hadamard(material_color, traced_color);
+        }
+
+        return material_color;
     }
 
     return SKYBLUE;
