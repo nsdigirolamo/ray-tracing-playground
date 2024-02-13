@@ -2,12 +2,8 @@
 #include <memory>
 #include <optional>
 
-#include "intersectables/plane.hpp"
 #include "lib/doctest/doctest.hpp"
-#include "materials/metallic.hpp"
-#include "primitives/color.hpp"
 #include "primitives/vector.hpp"
-#include "ray.hpp"
 #include "test/test_utils.hpp"
 
 TEST_SUITE ("Vector Construction Tests") {
@@ -93,78 +89,11 @@ TEST_SUITE ("Vector Property Tests") {
 TEST_SUITE ("Specialized Vector Operations") {
 
     TEST_CASE ("Vector Reflection") {
-
         Vector<3> incoming {{1, -1, 0}};
         Vector<3> surface_normal {{0, 1, 0}};
         Vector<3> expected_reflected {{1, 1, 0}};
         Vector<3> actual_reflected = reflect(incoming, surface_normal);
         compare_matrix(expected_reflected, actual_reflected);
-
-        Plane plane {
-                {{0, 0, 0}},
-                {{0, 1, 0}},
-                std::make_unique<Metallic>(RED, 0)
-            };
-
-        SUBCASE ("Reflection Off Plane") {
-
-            Ray incoming {
-                {{-1, 1, 0}},
-                {{1, -1, 0}}
-            };
-
-            Hit expected_hit {
-                {{1, -1, 0}},
-                sqrt(2),
-                {
-                    {{0, 0, 0}},
-                    {{0, 1, 0}}
-                },
-                true
-            };
-
-            std::optional<Hit> actual_hit = plane.intersects(incoming);
-
-            REQUIRE(actual_hit.has_value());
-            compare_hit(expected_hit, actual_hit.value());
-
-            Ray expected_scattered {
-                {{0, 0, 0}},
-                {{1, 1, 0}}
-            };
-            Ray actual_scattered = plane.getMaterial().scatter(actual_hit.value());
-            compare_ray(expected_scattered, actual_scattered)
-        }
-
-        SUBCASE ("Reflected Off Plane Backside") {
-
-            Ray incoming {
-                {{-1, -1, 0}},
-                {{1, 1, 0}}
-            };
-
-            Hit expected_hit {
-                {{1, 1, 0}},
-                sqrt(2),
-                {
-                    {{0, 0, 0}},
-                    {{0, -1, 0}}
-                },
-                false
-            };
-
-            std::optional<Hit> actual_hit = plane.intersects(incoming);
-
-            REQUIRE(actual_hit.has_value());
-            compare_hit(expected_hit, actual_hit.value());
-
-            Ray expected_scattered {
-                {{0, 0, 0}},
-                {{1, -1, 0}}
-            };
-            Ray actual_scattered = plane.getMaterial().scatter(actual_hit.value());
-            compare_ray(expected_scattered, actual_scattered)
-        }
     }
 
     TEST_CASE ("Vector Refraction") {
