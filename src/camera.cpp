@@ -206,20 +206,16 @@ Point Camera::generateRayOrigin () const {
         (offset[1] * this->focal_radius * this->view_vertical);
 }
 
-Point Camera::calculatePixelLocation (const int row, const int col) const {
+Point Camera::calculatePixelLocation (const int row, const int col, const bool is_anti_aliased) const {
 
-    double x = col * this->pixel_width + (0.5 * this->pixel_width);
-    double y = row * this->pixel_height + (0.5 * this->pixel_height);
+    double x = col * this->pixel_width - 0.5 * this->pixel_width - 0.5 * this->view_width;
+    double y = row * this->pixel_height - 0.5 * this->pixel_height - 0.5 * this->view_height;
 
-    Vector<2> random_offset = randomInUnitCircle();
-    double random_x_offset = random_offset[0] * this->pixel_width;
-    double random_y_offset = random_offset[1] * this->pixel_height;
-
-    double global_x_offset = this->view_width / 2.0;
-    double global_y_offset = this->view_height / 2.0;
-
-    x += random_x_offset - global_x_offset;
-    y += random_y_offset - global_y_offset;
+    if (is_anti_aliased) {
+        Vector<2> random_offset = randomInUnitCircle();
+        x += random_offset[0] * this->pixel_width;
+        y += random_offset[1] * this->pixel_height;
+    }
 
     return
         this->view_horizontal * x +
