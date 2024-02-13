@@ -26,7 +26,7 @@ TEST_SUITE ("Camera Construction Tests") {
         double expected_focal_radius = 0;
         Vector<3> expected_view_direction {{0, 0, 1}};
         Vector<3> expected_up_direction {{0, 1, 0}};
-        Vector<3> expected_view_horizontal {{1, 0, 0}};
+        Vector<3> expected_view_horizontal {{-1, 0, 0}};
         Vector<3> expected_view_vertical {{0, 1, 0}};
         double expected_view_width = 2.0;
         double expected_pixel_width = expected_view_width / expected_image_width;
@@ -41,19 +41,20 @@ TEST_SUITE ("Camera Construction Tests") {
         CHECK(expected_focal_radius == doctest::Approx(actual_camera.getFocalRadius()));
         CHECK_VECTOR(expected_view_direction, actual_camera.getViewDirection());
         CHECK_VECTOR(expected_up_direction, actual_camera.getUpDirection());
+        CHECK_VECTOR(expected_view_horizontal, actual_camera.getViewHorizontal());
+        CHECK_VECTOR(expected_view_vertical, actual_camera.getViewVertical());
         CHECK(expected_view_width == doctest::Approx(actual_camera.getViewWidth()));
         CHECK(expected_pixel_width == doctest::Approx(actual_camera.getPixelWidth()));
         CHECK(expected_view_height == doctest::Approx(actual_camera.getViewHeight()));
         CHECK(expected_pixel_height == doctest::Approx(actual_camera.getPixelHeight()));
         CHECK(expected_vertical_fov == doctest::Approx(actual_camera.getVerticalFOV()));
 
-        SUBCASE ("Calculate the location of the bottom left pixel.") {
+        SUBCASE ("Calculate the location of the top left pixel.") {
 
-            Point expected_pixel_location {{
-                0.5 * expected_view_width - 0.5 * expected_pixel_width,
-                -0.5 * expected_view_height + 0.5 * expected_pixel_height,
-                expected_focal_distance
-            }};
+            Point expected_pixel_location =
+                expected_view_horizontal * (-0.5 * expected_view_width + 0.5 * expected_pixel_width) +
+                expected_view_vertical * (0.5 * expected_view_height - 0.5 * expected_pixel_height) +
+                expected_view_direction * (expected_focal_distance);
 
             Point actual_pixel_location = actual_camera.calculatePixelLocation(0, 0, false);
 
