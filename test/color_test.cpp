@@ -1,50 +1,31 @@
-#include "lib/catch2/catch.hpp"
-#include "primitives/color.hpp"
+#include "lib/doctest/doctest.hpp"
 #include "test/test_utils.hpp"
 
-TEST_CASE ("Color initializes properly when given hex color val") {
+TEST_SUITE ("Color Tests") {
 
-    SECTION ("constructors") {
+    Color expected_white = {{255.0 / 256, 255.0 / 256, 255.0 / 256}};
+    Color expected_black = {{0.0, 0.0, 0.0}};
+    Color expected_silver = {{0.75, 0.75, 0.75}};
+    Color expected_maroon {{0.5, 0.0, 0.0}};
+    Color expected_beige = {{245.0 / 256, 245.0 / 256, 220.0 / 256}};
 
-        Color white = {{255.0 / 256, 255.0 / 256, 255.0 / 256}};
-        Color black = {{0.0, 0.0, 0.0}};
-        Color silver = {{0.75, 0.75, 0.75}};
-        Color maroon {{0.5, 0.0, 0.0}};
-        Color beige = {{245.0 / 256, 245.0 / 256, 220.0 / 256}};
+    TEST_CASE ("white") {
+        CHECK_COLOR(expected_white, WHITE);
+    }
 
-        GIVEN ("a color initialized with 0xFFFFFF") {
-            WHEN ("the color is constructed") {
-                Color color { 0xFFFFFF };
-                THEN ("the color is white") { compare_color(color, white); }
-            }
-        }
+    TEST_CASE ("black") {
+        CHECK_COLOR(expected_black, BLACK);
+    }
 
-        GIVEN ("a color initialized with 0xFFFFFF") {
-            WHEN ("the color is constructed") {
-                Color color { 0x000000 };
-                THEN ("the color is white") { compare_color(color, black); }
-            }
-        }
+    TEST_CASE ("silver") {
+        CHECK_COLOR(expected_silver, SILVER);
+    }
 
-        GIVEN ("a color initialized with 0xC0C0C0") {
-            WHEN ("the color is constructed") {
-                Color color { 0xC0C0C0 };
-                THEN ("the color is silver") { compare_color(color, silver); }
-            }
-        }
+    TEST_CASE ("maroon") {
+        CHECK_COLOR(expected_maroon, MAROON);
+    }
 
-        GIVEN ("a color initialized with 0x800000") {
-            WHEN ("the color is constructed") {
-                Color color { 0x800000 };
-                THEN ("the color is maroon") { compare_color(color, maroon); }
-            }
-        }
-
-        GIVEN ("a color initialized with 0xF5F5DC") {
-            WHEN ("the color is constructed") {
-                Color color { 0xF5F5DC };
-                THEN ("the color is beige") { compare_color(color, beige); }
-            }
-        }
+    TEST_CASE ("beige") {
+        CHECK_COLOR(expected_beige, BEIGE);
     }
 }

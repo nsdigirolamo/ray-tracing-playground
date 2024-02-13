@@ -1,146 +1,104 @@
-#include "lib/catch2/catch.hpp"
+#include <cmath>
+#include <memory>
+#include <optional>
+
+#include "lib/doctest/doctest.hpp"
 #include "primitives/vector.hpp"
 #include "test/test_utils.hpp"
 
-TEST_CASE ("vector initializers initialize properly") {
+TEST_SUITE ("Vector Construction Tests") {
 
-    SECTION ("vector initializes with the default initializer") {
-        GIVEN ("a vector is initialized with the default initializer") {
-            WHEN ("the vector is initialized") {
+    TEST_CASE ("Default Initialization") {
 
-                Vector<3> vector;
+        Vector<3> actual_vector;
 
-                THEN ("all values in the matrix are zero") {
-
-                    for (int row = 0; row < 3; row++) {
-                        CHECK(vector[row] == 0.0);
-                    }
-                }
-            }
+        for (int row = 0; row < 3; ++row) {
+            CHECK(0.0 == doctest::Approx(actual_vector[row]));
         }
     }
 
-    SECTION ("array initializer initializes properly") {
-        GIVEN ("a vector is initialized with an array") {
-            WHEN ("the vector is initialized") {
+    TEST_CASE ("Array Initialization") {
 
-                double my_array[3] = {1.0, 2.0, 3.0};
+        double expected_values[3] {1, 2, 3};
+        Vector<3> actual_vector { expected_values };
 
-                Vector<3> vector { my_array };
+        for (int row = 0; row < 3; ++row) {
+            CHECK(expected_values[row] == doctest::Approx(actual_vector[row]));
+        }
 
-                THEN ("the vector's values match the values of the array") {
+        SUBCASE ("The array used for initialization can be changed without changing the matrix.") {
+            expected_values[0] = 10.0;
+            CHECK_FALSE(expected_values[0] == doctest::Approx(actual_vector[0]));
+        }
+    }
 
-                    for (int row = 0; row < 3; row++) {
-                        CHECK(vector[row] == my_array[row]);
-                    }
+    TEST_CASE ("Matrix Initialization") {
 
-                } AND_THEN ("the vector can be changed without changing the array") {
+        Matrix<3,1> expected_matrix {{
+            {1},
+            {2},
+            {3}
+        }};
+        Vector<3> actual_vector { expected_matrix };
 
-                    vector[0] = 100.0;
-                    CHECK_FALSE(vector[0] == my_array[0]);
-
-                } AND_THEN ("the array can be changed without changing the vector") {
-
-                    my_array[1] = 100.0;
-                    CHECK_FALSE(vector[1] == my_array[1]);
-
-                }
-            }
+        for (int row = 0; row < 3; ++row) {
+            CHECK(expected_matrix[row, 0] == doctest::Approx(actual_vector[row]));
         }
     }
 }
 
-TEST_CASE ("vector dot product") {
+TEST_SUITE ("Vector Arithmetic Tests") {
 
-    SECTION ("dot product") {
-        GIVEN ("two vectors") {
+    Vector<3> lhs {{1, 2, 3}};
+    Vector<3> rhs {{4, 5, 6}};
 
-            Vector<3> v1 = {{1, 2, 3}};
-            Vector<3> v2 = {{7, 8, 9}};
+    TEST_CASE ("Vector Dot Product") {
+        double expected_dot_product = 32;
+        double actual_dot_product = dot(lhs, rhs);
+        CHECK(expected_dot_product == doctest::Approx(actual_dot_product));
+    }
 
-            WHEN ("the dot function is used") {
-
-                double result = dot(v1, v2);
-
-                THEN ("the dot product is calculated") {
-
-                    double dot_product = 50;
-
-                    CHECK(result == dot_product);
-                }
-            }
-        }
+    TEST_CASE ("Vector Cross Product") {
+        Vector<3> expected_cross_product = {{-3, 6, -3}};
+        Vector<3> actual_cross_product = cross(lhs, rhs);
+        CHECK(expected_cross_product == actual_cross_product);
     }
 }
 
-TEST_CASE ("length of vector") {
+TEST_SUITE ("Vector Property Tests") {
 
-    SECTION ("length") {
-        GIVEN ("a vector") {
+    Vector<3> vector {{1, 2, 3}};
 
-            Vector<3> vector = {{1, 2, 3}};
+    TEST_CASE ("Vector Length Squared") {
+        double expected_length = 14;
+        double actual_length = length_squared(vector);
+        CHECK(expected_length == doctest::Approx(actual_length));
+    }
 
-            WHEN ("the length function is used") {
+    TEST_CASE ("Vector Length") {
+        double expected_length = 3.74165738677;
+        double actual_length = length(vector);
+        CHECK(expected_length == doctest::Approx(actual_length));
+    }
 
-                double result = length(vector);
-
-                THEN ("the length is calculated") {
-
-                    double length = sqrt(14);
-
-                    CHECK(result == Approx(length));
-                }
-            }
-        } AND_GIVEN ("a unit vector") {
-
-            Vector<3> unit_vector = {{1, 0, 0}};
-
-            WHEN ("the length function is used") {
-
-                double result = length(unit_vector);
-
-                THEN ("the length is calculated as one") {
-
-                    double length = 1.0;
-
-                    CHECK(result == length);
-                }
-            }
-        }
+    TEST_CASE ("Unit Vector") {
+        Vector<3> expected_unit = {{1.0 / length(vector), 2.0 / length(vector), 3.0 / length(vector)}};
+        Vector<3> actual_unit = unit(vector);
+        CHECK_VECTOR(expected_unit, actual_unit);
     }
 }
 
-TEST_CASE ("direction of vector") {
+TEST_SUITE ("Specialized Vector Operations") {
 
-    SECTION ("direction") {
-        GIVEN ("a vector") {
+    TEST_CASE ("Vector Reflection") {
+        Vector<3> incoming {{1, -1, 0}};
+        Vector<3> surface_normal {{0, 1, 0}};
+        Vector<3> expected_reflected {{1, 1, 0}};
+        Vector<3> actual_reflected = reflect(incoming, surface_normal);
+        CHECK_VECTOR(expected_reflected, actual_reflected);
+    }
 
-            Vector<3> vector = {{1, 2, 3}};
-
-            WHEN ("the unit function is used") {
-
-                Vector<3> result = unit(vector);
-
-                THEN ("the length is calculated") {
-
-                    Vector<3> direction = {{0.26726, 0.53452, 0.80178}};
-
-                    compare_matrix(result, direction);
-                }
-            }
-        } AND_GIVEN ("a unit vector") {
-
-            Vector<3> unit_vector = {{1, 0, 0}};
-
-            WHEN ("the unit function is used") {
-
-                Vector<3> result = unit(unit_vector);
-
-                THEN ("the direction is equal to the unit vector") {
-
-                    compare_matrix(result, unit_vector);
-                }
-            }
-        }
+    TEST_CASE ("Vector Refraction") {
+        // TODO
     }
 }

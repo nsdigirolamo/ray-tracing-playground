@@ -13,6 +13,9 @@ class Matrix {
 
     double values[height][width];
 
+    unsigned int rows = height;
+    unsigned int columns = width;
+
     public:
 
     Matrix () {
@@ -29,6 +32,14 @@ class Matrix {
                 this->values[row][col] = values[row][col];
             }
         }
+    }
+
+    unsigned int getRows () const {
+        return this->rows;
+    }
+
+    unsigned int getCols () const {
+        return this->columns;
     }
 
     Matrix<height, width>& operator+= (const Matrix<height, width>& rhs) {
