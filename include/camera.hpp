@@ -49,9 +49,6 @@ class Camera {
             const UnitVector<3>& up_direction
         );
 
-        Point generateRayOrigin () const;
-        Point calculatePixelLocation (const int row, const int col) const;
-
     public:
 
         Camera (
@@ -124,6 +121,9 @@ class Camera {
         UnitVector<3> getViewDirection () const;
         UnitVector<3> getViewVertical () const;
         UnitVector<3> getViewHorizontal () const;
+
+        Point generateRayOrigin () const;
+        Point calculatePixelLocation (const int row, const int col, const bool is_anti_aliased = true) const;
 
         std::vector<Color> capture (const std::list<Intersectable*> scene, const int samples_per_pixel, const int steps_per_sample) const;
 };
