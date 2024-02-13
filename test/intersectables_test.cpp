@@ -52,7 +52,7 @@ TEST_SUITE ("Sphere Intersections") {
                 true
             };
 
-            compare_hit(expected_hit, actual_hit.value());
+            CHECK_HIT(expected_hit, actual_hit.value());
         }
 
         SUBCASE ("Two intersections.") {
@@ -78,7 +78,7 @@ TEST_SUITE ("Sphere Intersections") {
                 true
             };
 
-            compare_hit(expected_hit, actual_hit.value());
+            CHECK_HIT(expected_hit, actual_hit.value());
         }
 
         SUBCASE ("One intersection from within sphere.") {
@@ -104,7 +104,7 @@ TEST_SUITE ("Sphere Intersections") {
                 false
             };
 
-            compare_hit(expected_hit, actual_hit.value());
+            CHECK_HIT(expected_hit, actual_hit.value());
         }
     }
 }
@@ -153,7 +153,7 @@ TEST_SUITE ("Plane Intersections") {
                 true
             };
 
-            compare_hit(expected_hit, actual_hit.value());
+            CHECK_HIT(expected_hit, actual_hit.value());
         }
 
         SUBCASE ("One intersection from behind plane.") {
@@ -179,7 +179,7 @@ TEST_SUITE ("Plane Intersections") {
                 false
             };
 
-            compare_hit(expected_hit, actual_hit.value());
+            CHECK_HIT(expected_hit, actual_hit.value());
         }
     }
 }

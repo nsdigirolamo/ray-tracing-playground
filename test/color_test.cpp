@@ -10,22 +10,22 @@ TEST_SUITE ("Color Tests") {
     Color expected_beige = {{245.0 / 256, 245.0 / 256, 220.0 / 256}};
 
     TEST_CASE ("white") {
-        compare_color(expected_white, WHITE);
+        CHECK_COLOR(expected_white, WHITE);
     }
 
     TEST_CASE ("black") {
-        compare_color(expected_black, BLACK);
+        CHECK_COLOR(expected_black, BLACK);
     }
 
     TEST_CASE ("silver") {
-        compare_color(expected_silver, SILVER);
+        CHECK_COLOR(expected_silver, SILVER);
     }
 
     TEST_CASE ("maroon") {
-        compare_color(expected_maroon, MAROON);
+        CHECK_COLOR(expected_maroon, MAROON);
     }
 
     TEST_CASE ("beige") {
-        compare_color(expected_beige, BEIGE);
+        CHECK_COLOR(expected_beige, BEIGE);
     }
 }

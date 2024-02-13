@@ -80,7 +80,7 @@ TEST_SUITE ("Matrix Arithmetic Tests") {
     double scalar = 10;
 
     TEST_CASE ("Matrix Addition") {
-        
+
         Matrix<3,3> expected_sum_matrix {{
             {3, 5, 7},
             {9, 11, 13},
@@ -88,14 +88,14 @@ TEST_SUITE ("Matrix Arithmetic Tests") {
         }};
 
         SUBCASE ("+= operation") {
-            Matrix<3,3> actual_matrix = lhs; 
+            Matrix<3,3> actual_matrix = lhs;
             actual_matrix += rhs;
-            compare_matrix(expected_sum_matrix, actual_matrix);
+            CHECK_MATRIX(expected_sum_matrix, actual_matrix);
         }
 
         SUBCASE ("+ operation") {
             Matrix<3,3> actual_matrix = lhs + rhs;
-            compare_matrix(expected_sum_matrix, actual_matrix);
+            CHECK_MATRIX(expected_sum_matrix, actual_matrix);
         }
     }
 
@@ -108,14 +108,14 @@ TEST_SUITE ("Matrix Arithmetic Tests") {
         }};
 
         SUBCASE ("-= operation") {
-            Matrix<3,3> actual_matrix = lhs; 
+            Matrix<3,3> actual_matrix = lhs;
             actual_matrix -= rhs;
-            compare_matrix(expected_difference_matrix, actual_matrix);
+            CHECK_MATRIX(expected_difference_matrix, actual_matrix);
         }
 
         SUBCASE ("- operation") {
             Matrix<3,3> actual_matrix = lhs - rhs;
-            compare_matrix(expected_difference_matrix, actual_matrix);
+            CHECK_MATRIX(expected_difference_matrix, actual_matrix);
         }
     }
 
@@ -130,12 +130,12 @@ TEST_SUITE ("Matrix Arithmetic Tests") {
         SUBCASE ("*= operation") {
             Matrix<3,3> actual_matrix = lhs;
             actual_matrix *= scalar;
-            compare_matrix(expected_product_matrix, actual_matrix);
+            CHECK_MATRIX(expected_product_matrix, actual_matrix);
         }
 
         SUBCASE ("* operation") {
             Matrix<3,3> actual_matrix = scalar * lhs;
-            compare_matrix(expected_product_matrix, actual_matrix);
+            CHECK_MATRIX(expected_product_matrix, actual_matrix);
         }
     }
 
@@ -150,17 +150,17 @@ TEST_SUITE ("Matrix Arithmetic Tests") {
         SUBCASE ("/= operation") {
             Matrix<3,3> actual_matrix = lhs;
             actual_matrix /= scalar;
-            compare_matrix(expected_quotient_matrix, actual_matrix);
+            CHECK_MATRIX(expected_quotient_matrix, actual_matrix);
         }
 
         SUBCASE ("/ operation") {
             Matrix<3,3> actual_matrix = lhs / scalar;
-            compare_matrix(expected_quotient_matrix, actual_matrix);
+            CHECK_MATRIX(expected_quotient_matrix, actual_matrix);
         }
     }
 
     TEST_CASE ("Matrix Hadamard Product") {
-        
+
         Matrix<3,3> expected_product_matrix {{
             {2, 6, 12},
             {20, 30, 42},
@@ -168,7 +168,7 @@ TEST_SUITE ("Matrix Arithmetic Tests") {
         }};
 
         Matrix<3,3> actual_matrix = hadamard(lhs, rhs);
-        compare_matrix(expected_product_matrix, actual_matrix);
+        CHECK_MATRIX(expected_product_matrix, actual_matrix);
     }
 }
 
@@ -201,7 +201,7 @@ TEST_SUITE ("Matrix Transform Tests") {
             {1}
         }};
         Matrix<3, 1> actual_vector = identity_matrix.transform(vector);
-        compare_matrix(expected_vector, actual_vector);
+        CHECK_MATRIX(expected_vector, actual_vector);
     }
 
     TEST_CASE ("90 Degree Rotation Transformation") {
@@ -211,12 +211,12 @@ TEST_SUITE ("Matrix Transform Tests") {
             {0}
         }};
         Matrix<3, 1> actual_vector = y_rotation_matrix.transform(vector);
-        compare_matrix(expected_vector, actual_vector);
+        CHECK_MATRIX(expected_vector, actual_vector);
     }
 }
 
 TEST_SUITE ("Matrix Comparison Tests") {
-    
+
     Matrix<3, 3> lhs {{
         {1, 2, 3},
         {4, 5, 6},

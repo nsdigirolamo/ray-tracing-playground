@@ -41,7 +41,9 @@ TEST_SUITE ("Vector Construction Tests") {
         }};
         Vector<3> actual_vector { expected_matrix };
 
-        compare_matrix(expected_matrix, actual_vector);
+        for (int row = 0; row < 3; ++row) {
+            CHECK(expected_matrix[row, 0] == doctest::Approx(actual_vector[row]));
+        }
     }
 }
 
@@ -82,7 +84,7 @@ TEST_SUITE ("Vector Property Tests") {
     TEST_CASE ("Unit Vector") {
         Vector<3> expected_unit = {{1.0 / length(vector), 2.0 / length(vector), 3.0 / length(vector)}};
         Vector<3> actual_unit = unit(vector);
-        compare_matrix(expected_unit, actual_unit);
+        CHECK_VECTOR(expected_unit, actual_unit);
     }
 }
 
@@ -93,7 +95,7 @@ TEST_SUITE ("Specialized Vector Operations") {
         Vector<3> surface_normal {{0, 1, 0}};
         Vector<3> expected_reflected {{1, 1, 0}};
         Vector<3> actual_reflected = reflect(incoming, surface_normal);
-        compare_matrix(expected_reflected, actual_reflected);
+        CHECK_VECTOR(expected_reflected, actual_reflected);
     }
 
     TEST_CASE ("Vector Refraction") {

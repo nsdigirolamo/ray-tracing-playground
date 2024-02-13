@@ -39,7 +39,7 @@ TEST_SUITE ("Metallic Material Tests") {
         std::optional<Hit> actual_hit = plane.intersects(incoming);
 
         REQUIRE(actual_hit.has_value());
-        compare_hit(expected_hit, actual_hit.value());
+        CHECK_HIT(expected_hit, actual_hit.value());
 
         Ray expected_scattered {
             {{0, 0, 0}},
@@ -47,10 +47,10 @@ TEST_SUITE ("Metallic Material Tests") {
         };
 
         Ray actual_scattered = plane.getMaterial().scatter(actual_hit.value());
-        compare_ray(expected_scattered, actual_scattered);
+        CHECK_RAY(expected_scattered, actual_scattered);
 
         Color actual_color = plane.getMaterial().getColor();
-        compare_color(expected_color, actual_color);
+        CHECK_COLOR(expected_color, actual_color);
 
         SUBCASE ("Scatter on plane backside.") {
 
@@ -72,7 +72,7 @@ TEST_SUITE ("Metallic Material Tests") {
             std::optional<Hit> actual_hit = plane.intersects(incoming);
 
             REQUIRE(actual_hit.has_value());
-            compare_hit(expected_hit, actual_hit.value());
+            CHECK_HIT(expected_hit, actual_hit.value());
 
             Ray expected_scattered {
                 {{0, 0, 0}},
@@ -80,10 +80,10 @@ TEST_SUITE ("Metallic Material Tests") {
             };
 
             Ray actual_scattered = plane.getMaterial().scatter(actual_hit.value());
-            compare_ray(expected_scattered, actual_scattered);
+            CHECK_RAY(expected_scattered, actual_scattered);
 
             Color actual_color = plane.getMaterial().getColor();
-            compare_color(expected_color, actual_color);
+            CHECK_COLOR(expected_color, actual_color);
         }
     }
 }
