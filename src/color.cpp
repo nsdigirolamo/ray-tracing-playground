@@ -64,7 +64,7 @@ void writeImage (const std::string file_name, const std::vector<Color>& pixels, 
 
     file << "P3\n\n" << image_width << " " << image_height << "\n" << "255\n";
 
-    for (int row = image_height - 1; 0 <= row; --row) {
+    for (int row = 0; row < image_height; ++row) {
         for (int col = 0; col < image_width; ++col) {
             writePixel(
                 file,
