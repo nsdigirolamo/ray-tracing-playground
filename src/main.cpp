@@ -81,6 +81,6 @@ int main () {
         &diffuse_plane
     };
 
-    std::vector<Color> pixels = camera.capture(objects, 100, 100);
+    std::vector<Color> pixels = camera.capture(objects, 100, 100, true);
     writeImage("scene", pixels, camera.getImageHeight(), camera.getImageWidth());
 }

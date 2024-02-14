@@ -229,7 +229,12 @@ Ray Camera::getRay (const int row, const int col, const bool is_anti_aliased) co
     return { ray_origin, ray_direction };
 }
 
-std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const int samples_per_pixel, const int steps_per_sample) const {
+std::vector<Color> Camera::capture (
+    const std::list<Intersectable*> scene,
+    const int samples_per_pixel,
+    const int steps_per_sample,
+    const bool is_anti_aliased
+) const {
 
     std::cout << "Rendering image...\n";
 
@@ -242,7 +247,7 @@ std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const
 
             for (int sample = 0; sample < samples_per_pixel; ++sample) {
                 color += trace(
-                    this->getRay(row, col),
+                    this->getRay(row, col, is_anti_aliased),
                     scene,
                     steps_per_sample
                 );

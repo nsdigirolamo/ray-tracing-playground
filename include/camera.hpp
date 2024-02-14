@@ -123,10 +123,24 @@ class Camera {
         UnitVector<3> getViewHorizontal () const;
 
         Point generateRayOrigin () const;
-        Point calculatePixelLocation (const int row, const int col, const bool is_anti_aliased = true) const;
-        Ray getRay (const int row, const int col, const bool is_anti_aliased = true) const;
 
-        std::vector<Color> capture (const std::list<Intersectable*> scene, const int samples_per_pixel, const int steps_per_sample) const;
+        Point calculatePixelLocation (
+            const int row, const int col,
+            const bool is_anti_aliased
+        ) const;
+
+        Ray getRay (
+            const int row,
+            const int col,
+            const bool is_anti_aliased
+        ) const;
+
+        std::vector<Color> capture (
+            const std::list<Intersectable*> scene,
+            const int samples_per_pixel,
+            const int steps_per_sample,
+            const bool is_anti_aliased
+        ) const;
 };
 
 Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, const int steps);
