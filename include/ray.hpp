@@ -10,8 +10,6 @@ class Ray {
 
     const Point origin;
     const UnitVector<3> direction;
-
-    Ray (const Point& origin, const UnitVector<3>& direction);
 };
 
 #endif
