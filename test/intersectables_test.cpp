@@ -17,11 +17,23 @@ TEST_SUITE ("Sphere Intersections") {
             std::make_unique<Diffuse>(RED)
         };
 
-        SUBCASE ("Zero intersections.") {
+        SUBCASE ("Zero intersections (sphere is behind ray).") {
 
             Ray ray {
                 {{0, 0, 0}},
                 {{0, 0, -1}}
+            };
+
+            std::optional<Hit> actual_hit = sphere.intersects(ray);
+
+            CHECK_FALSE(actual_hit.has_value());
+        }
+
+        SUBCASE ("Zero intersections (ray misses sphere completely).") {
+
+            Ray ray {
+                {{10, 0, 0}},
+                {{0, 0, 1}}
             };
 
             std::optional<Hit> actual_hit = sphere.intersects(ray);
@@ -118,11 +130,23 @@ TEST_SUITE ("Plane Intersections") {
             std::make_unique<Diffuse>(RED)
         };
 
-        SUBCASE ("Zero intersections.") {
+        SUBCASE ("Zero intersections (plane and ray are parallel).") {
 
             Ray ray {
                 {{0, 1, 0}},
                 {{0, 0, 1}}
+            };
+
+            std::optional<Hit> actual_hit = plane.intersects(ray);
+
+            CHECK_FALSE(actual_hit.has_value());
+        }
+
+        SUBCASE ("Zero intersections (plane is behind ray).") {
+
+            Ray ray {
+                {{0, 1, 0}},
+                {{0, 1, 0}}
             };
 
             std::optional<Hit> actual_hit = plane.intersects(ray);
