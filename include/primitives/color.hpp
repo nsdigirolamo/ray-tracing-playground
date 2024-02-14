@@ -26,6 +26,8 @@ void writeImage (const std::string file_name, const std::vector<Color>& pixels, 
 
 // https://developer.mozilla.org/en-US/docs/Web/CSS/named-color
 
+#define SKY SKYBLUE
+
 #define BLACK                (Color){ 0x000000 }
 #define SILVER               (Color){ 0xC0C0C0 }
 #define GRAY                 (Color){ 0x808080 }
