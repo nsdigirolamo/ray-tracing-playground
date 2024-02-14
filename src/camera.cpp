@@ -209,7 +209,7 @@ Point Camera::generateRayOrigin () const {
 Point Camera::calculatePixelLocation (const int row, const int col, const bool is_anti_aliased) const {
 
     double x = -0.5 * this->view_width + col * this->pixel_width + 0.5 * this->pixel_width;
-    double y = 0.5 * this->view_height + row * this->pixel_height - 0.5 * this->pixel_height;
+    double y = 0.5 * this->view_height - row * this->pixel_height - 0.5 * this->pixel_height;
 
     if (is_anti_aliased) {
         Vector<2> random_offset = randomInUnitCircle();
@@ -221,6 +221,12 @@ Point Camera::calculatePixelLocation (const int row, const int col, const bool i
         this->view_horizontal * x +
         this->view_vertical * y +
         this->view_direction * this->focal_distance;
+}
+
+Ray Camera::getRay (const int row, const int col, const bool is_anti_aliased) const {
+    Point ray_origin = this->generateRayOrigin();
+    UnitVector<3> ray_direction = this->calculatePixelLocation(row, col, is_anti_aliased) - ray_origin;
+    return { ray_origin, ray_direction };
 }
 
 std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const int samples_per_pixel, const int steps_per_sample) const {
@@ -235,12 +241,11 @@ std::vector<Color> Camera::capture (const std::list<Intersectable*> scene, const
             Color color = {{0, 0, 0}};
 
             for (int sample = 0; sample < samples_per_pixel; ++sample) {
-
-                Point origin = this->generateRayOrigin();
-                UnitVector<3> direction = this->calculatePixelLocation(row, col) - origin;
-
-                Ray ray { origin, direction };
-                color += trace(ray, scene, steps_per_sample);
+                color += trace(
+                    this->getRay(row, col),
+                    scene,
+                    steps_per_sample
+                );
             }
 
             pixels[(row * this->image_width) + col] = color / samples_per_pixel;
@@ -289,5 +294,5 @@ Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, int
         return material_color;
     }
 
-    return SKYBLUE;
+    return SKY;
 }
