@@ -6,6 +6,7 @@
 #include "intersectables/plane.hpp"
 #include "lib/doctest/doctest.hpp"
 #include "materials/diffuse.hpp"
+#include "materials/metallic.hpp"
 #include "primitives/matrix.hpp"
 #include "primitives/vector.hpp"
 #include "test/test_utils.hpp"
@@ -114,10 +115,10 @@ TEST_SUITE ("Camera function tests") {
         CHECK_VECTOR(expected_pixel_location, actual_pixel_location);
     }
 
-    TEST_CASE ("Trace a plane aligned with the x axis") {
+    TEST_CASE ("Tracing ray against a plane aligned with the xz axises") {
 
         Plane plane {
-            {{0, -1, 0}},
+            {{0, 0, 0}},
             {{0, 1, 0}},
             std::make_unique<Diffuse>(RED)
         };
@@ -126,33 +127,63 @@ TEST_SUITE ("Camera function tests") {
             &plane
         };
 
+        Ray actual_ray {
+            {{0, 1, 0}},
+            {{0, -1, 0}}
+        };
+
         SUBCASE ("1 step per sample") {
-
             Color expected_color = RED;
-
-            Ray actual_ray = actual_camera.getRay(
-                actual_camera.getImageHeight(),
-                0,
-                false
-            );
-
             Color actual_color = trace(actual_ray, scene, 1);
-
             CHECK_COLOR(expected_color, actual_color);
         }
 
         SUBCASE ("2 step per sample") {
-
             Color expected_color = hadamard(RED, SKY);
-
-            Ray actual_ray = actual_camera.getRay(
-                actual_camera.getImageHeight(),
-                0,
-                false
-            );
-
             Color actual_color = trace(actual_ray, scene, 2);
+            CHECK_COLOR(expected_color, actual_color);
+        }
+    }
 
+    TEST_CASE ("Tracing a ray against 2 axis-aligned planes") {
+
+        Plane xz_plane {
+            {{0, 0, 0}},
+            {{0, 1, 0}},
+            std::make_unique<Metallic>(CORAL, 0.0)
+        };
+
+        Plane xy_plane {
+            {{0, 0, 0}},
+            {{0, 0, 1}},
+            std::make_unique<Metallic>(LAVENDER, 0.0)
+        };
+
+        std::list<Intersectable*> scene = {
+            &xz_plane,
+            &xy_plane
+        };
+
+        Ray actual_ray {
+            {{0, 1, 2}},
+            {{0, -1, -1}}
+        };
+
+        SUBCASE ("1 step per sample") {
+            Color expected_color = CORAL;
+            Color actual_color = trace(actual_ray, scene, 1);
+            CHECK_COLOR(expected_color, actual_color)
+        }
+
+        SUBCASE ("2 step per sample") {
+            Color expected_color = hadamard(CORAL, LAVENDER);
+            Color actual_color = trace(actual_ray, scene, 2);
+            CHECK_COLOR(expected_color, actual_color);
+        }
+
+        SUBCASE ("3 step per sample") {
+            Color expected_color = hadamard(SKY, hadamard(CORAL, LAVENDER));
+            Color actual_color = trace(actual_ray, scene, 3);
             CHECK_COLOR(expected_color, actual_color);
         }
     }
