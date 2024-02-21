@@ -230,7 +230,7 @@ Ray Camera::getRay (const int row, const int col, const bool is_anti_aliased) co
 }
 
 std::vector<Color> Camera::capture (
-    const std::list<Intersectable*> scene,
+    const std::list<std::shared_ptr<Intersectable>> scene,
     const int samples_per_pixel,
     const int steps_per_sample,
     const bool is_anti_aliased
@@ -264,9 +264,9 @@ std::vector<Color> Camera::capture (
     return pixels;
 }
 
-Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, int steps) {
+Color trace (const Ray& ray, const std::list<std::shared_ptr<Intersectable>> intersectables, int steps) {
 
-    std::optional<std::tuple<Intersectable*, Hit>> closest = {};
+    std::optional<std::tuple<std::shared_ptr<Intersectable>, Hit>> closest = {};
 
     for (auto it = intersectables.begin(); it != intersectables.end(); ++it) {
 
@@ -285,7 +285,7 @@ Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, int
     if (closest.has_value()) {
 
         Hit hit = std::get<Hit>(closest.value());
-        Intersectable* intersectable = std::get<Intersectable*>(closest.value());
+        std::shared_ptr<Intersectable> intersectable = std::get<std::shared_ptr<Intersectable>>(closest.value());
         const Material& material = intersectable->getMaterial();
         Color material_color = material.getColor();
 

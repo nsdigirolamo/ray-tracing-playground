@@ -2,6 +2,7 @@
 #define CAMERA_HPP
 
 #include <list>
+#include <memory>
 #include <optional>
 #include <ostream>
 #include <vector>
@@ -136,13 +137,13 @@ class Camera {
         ) const;
 
         std::vector<Color> capture (
-            const std::list<Intersectable*> scene,
+            const std::list<std::shared_ptr<Intersectable>> scene,
             const int samples_per_pixel,
             const int steps_per_sample,
             const bool is_anti_aliased
         ) const;
 };
 
-Color trace (const Ray& ray, const std::list<Intersectable*> intersectables, const int steps);
+Color trace (const Ray& ray, const std::list<std::shared_ptr<Intersectable>> intersectables, const int steps);
 
 #endif
