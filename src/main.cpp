@@ -1,4 +1,5 @@
 #include <list>
+#include <cmath>
 #include <memory>
 
 #include "camera.hpp"
@@ -13,74 +14,83 @@
 int main () {
 
     Camera camera {
-        {{0, 0, 0}},
+        {{13, 2, 3}},
         1080,
         1920,
-        90,
+        70,
         10.0,
-        10.0,
-        {{0, 0, 10}}
+        0.6,
+        {{0, 0, 0}}
     };
 
-    Sphere diffuse1 = {
-        {{5, 0, 5}},
+    std::shared_ptr<Sphere> ground = std::make_shared<Sphere>(
+        (Point){{0, -1000, 0}},
+        1000,
+        std::make_unique<Diffuse>((Color){0.5, 0.5, 0.5})
+    );
+
+    std::shared_ptr<Sphere> glass = std::make_shared<Sphere>(
+        (Point){{0, 1, 0}},
         1.0,
-        std::make_unique<Diffuse>(RED)
-    };
+        std::make_unique<Refractive>(WHITESMOKE, 1.5)
+    );
 
-    Sphere diffuse2 = {
-        {{0, 0, 10}},
+    std::shared_ptr<Sphere> diffuse = std::make_shared<Sphere>(
+        (Point){{-4, 1, 0}},
         1.0,
-        std::make_unique<Diffuse>(GREEN)
-    };
+        std::make_unique<Diffuse>((Color){0.4, 0.2, 0.1})
+    );
 
-    Sphere diffuse3 = {
-        {{-5, 0, 15}},
+    std::shared_ptr<Sphere> metal = std::make_shared<Sphere>(
+        (Point){{4, 1, 0}},
         1.0,
-        std::make_unique<Diffuse>(BLUE)
+        std::make_unique<Metallic>((Color){0.7, 0.6, 0.5}, 0.0)
+    );
+
+    std::list<std::shared_ptr<Intersectable>> objects = {
+        ground,
+        glass,
+        diffuse,
+        metal
     };
 
-    Sphere diffuse4 = {
-        {{-10, 0, 20}},
-        1.0,
-        std::make_unique<Diffuse>(YELLOW)
-    };
+    for (int i = -11; i < 11; ++i) {
+        for (int j = -11; j < 11; ++j) {
 
-    Sphere diffuse5 = {
-        {{-15, 0, 25}},
-        1.0,
-        std::make_unique<Diffuse>(MAGENTA)
-    };
+            double get_material = randomDouble();
+            Point center {{ i + 0.9 * randomDouble(), 0.2, j + 0.9 * randomDouble() }};
+            Color color {{ fabs(randomDouble()), fabs(randomDouble()), fabs(randomDouble()) }};
+            std::shared_ptr<Sphere> sphere;
 
-    Sphere diffuse6 = {
-        {{-20, 0, 30}},
-        1.0,
-        std::make_unique<Diffuse>(CYAN)
-    };
+            if (get_material < 0.33) {
 
-    Sphere diffuse7 = {
-        {{-25, 0, 35}},
-        1.0,
-        std::make_unique<Diffuse>(MAGENTA)
-    };
+                sphere = std::make_shared<Sphere>(
+                    center,
+                    0.2,
+                    std::make_unique<Diffuse>(color)
+                );
 
-    Plane diffuse_plane = {
-        {{0, -1.0, 0}},
-        {{0, 1, 0}},
-        std::make_unique<Diffuse>(CORAL)
-    };
+            } else if (get_material < 0.66) {
 
-    std::list<Intersectable*> objects = {
-        &diffuse1,
-        &diffuse2,
-        &diffuse3,
-        &diffuse4,
-        &diffuse5,
-        &diffuse6,
-        &diffuse7,
-        &diffuse_plane
-    };
+                sphere = std::make_shared<Sphere>(
+                    center,
+                    0.2,
+                    std::make_unique<Metallic>(color, fabs(randomDouble()))
+                );
 
-    std::vector<Color> pixels = camera.capture(objects, 100, 100, true);
+            } else {
+
+                sphere = std::make_shared<Sphere>(
+                    center,
+                    0.2,
+                    std::make_unique<Refractive>(color, 1.0 + randomDouble())
+                );
+            }
+
+            objects.push_back(sphere);
+        }
+    }
+
+    std::vector<Color> pixels = camera.capture(objects, 500, 50, true);
     writeImage("scene", pixels, camera.getImageHeight(), camera.getImageWidth());
 }
