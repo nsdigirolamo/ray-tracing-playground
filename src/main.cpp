@@ -49,18 +49,18 @@ std::shared_ptr<Sphere> getRandomSphere (const Point& origin) {
 int main () {
 
     Camera camera {
-        {{13, 1.25, 5}},
+        {{13, 1.2, 3}},
         1080,
         1920,
-        70,
-        14,
-        0.4,
+        75,
+        10.0,
+        0.3,
         {{0, 1, 0}}
     };
 
     std::shared_ptr<Plane> ground = std::make_shared<Plane>(
         (Point){{0, 0, 0}},
-        (Vector<3>){{0, 1, 0}},
+        (Point){{0, 1, 0}},
         std::make_unique<Diffuse>(SLATEGRAY)
     );
 
@@ -106,19 +106,19 @@ int main () {
 
     for (int i = 0; i < 24; ++i) {
 
-        for (int j = 0; j < 10; ++j) {
+        for (int j = 0; j < 5; ++j) {
             objects.push_back(getRandomSphere(
                 (Point){{6.0 + j * 2, 0.2, -12.0 + i}}
             ));
         }
 
-        for (int j = 0; j < 10; ++j) {
+        for (int j = 0; j < 5; ++j) {
             objects.push_back(getRandomSphere(
                 (Point){{-6.0 + j * -2, 0.2, 12.0 - i}}
             ));
         }
     }
 
-    std::vector<Color> pixels = camera.capture(objects, 50, 50, true);
+    std::vector<Color> pixels = camera.capture(objects, 100, 50, true);
     writeImage("scene", pixels, camera.getImageHeight(), camera.getImageWidth());
 }
