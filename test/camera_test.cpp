@@ -117,14 +117,14 @@ TEST_SUITE ("Camera function tests") {
 
     TEST_CASE ("Tracing ray against a plane aligned with the xz axises") {
 
-        Plane plane {
-            {{0, 0, 0}},
-            {{0, 1, 0}},
+        std::shared_ptr<Plane> plane = std::make_shared<Plane>(
+            (Point){{0, 0, 0}},
+            (Vector<3>){{0, 1, 0}},
             std::make_unique<Diffuse>(RED)
-        };
+        );
 
-        std::list<Intersectable*> scene = {
-            &plane
+        std::list<std::shared_ptr<Intersectable>> scene = {
+            plane
         };
 
         Ray actual_ray {
@@ -147,21 +147,21 @@ TEST_SUITE ("Camera function tests") {
 
     TEST_CASE ("Tracing a ray against 2 axis-aligned planes") {
 
-        Plane xz_plane {
-            {{0, 0, 0}},
-            {{0, 1, 0}},
+        std::shared_ptr<Plane> xz_plane = std::make_shared<Plane>(
+            (Point){{0, 0, 0}},
+            (Vector<3>){{0, 1, 0}},
             std::make_unique<Metallic>(CORAL, 0.0)
-        };
+        );
 
-        Plane xy_plane {
-            {{0, 0, 0}},
-            {{0, 0, 1}},
+        std::shared_ptr<Plane> xy_plane = std::make_shared<Plane>(
+            (Point){{0, 0, 0}},
+            (Vector<3>){{0, 0, 1}},
             std::make_unique<Metallic>(LAVENDER, 0.0)
-        };
+        );
 
-        std::list<Intersectable*> scene = {
-            &xz_plane,
-            &xy_plane
+        std::list<std::shared_ptr<Intersectable>> scene = {
+            xz_plane,
+            xy_plane
         };
 
         Ray actual_ray {
