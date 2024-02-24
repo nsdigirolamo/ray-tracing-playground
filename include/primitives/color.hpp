@@ -13,15 +13,70 @@ class Color : public Vector<3> {
 
     public:
 
+    /**
+     * @brief Constructs a new Color object where all values are 0.
+     */
     Color ();
+
+    /**
+     * @brief Constructs a new Color object where the values are set to the
+     * given arguments.
+     *
+     * @param r The red attribute of the color.
+     * @param g The green attribute of the color.
+     * @param b The blue attribute of the color.
+     */
     Color (const double r, const double g, const double b);
+
+    /**
+     * @brief Constructs a new Color object where the r, g, and b values are
+     * set to the 0th, 1st, and 2nd elements of the given array, respectively.
+     *
+     * @param values
+     */
     Color (const double (&values)[3]);
+
+    /**
+     * @brief Constructs a new Color object where the r, g, and b values are
+     * set to the [0, 0]th, [1, 0]th, and [2, 0]th elements of the given Matrix,
+     * respectively.
+     *
+     * @param m
+     */
     Color (const Matrix<3, 1>& m);
+
+    /**
+     * @brief Constructs a new Color object where the r, g, and b values are
+     * set to the 0th, 1st, and 2nd elements of the given array, respectively.
+     *
+     * @param values
+     */
     Color (const Vector<3>& v);
+
+    /**
+     * @brief Construct a new Color object based on the given hex color value.
+     *
+     * @param rgb_hex_value
+     */
     Color (const int rgb_hex_value);
 };
 
+/**
+ * @brief Writes a pixel's RGB color to the given file stream.
+ *
+ * @param file
+ * @param pixel
+ */
 void writePixel (std::ofstream& file, const Color& pixel);
+
+/**
+ * @brief Writes a vector of pixels to a .ppm file with the given file name.
+ *
+ * @param file_name The name of the outputted .ppm file.
+ * @param pixels The pixels in the image.
+ * @param image_height The height of the image in pixels.
+ * @param image_width The width of the image in pixels.
+ */
 void writeImage (const std::string file_name, const std::vector<Color>& pixels, int image_height, int image_width);
 
 // https://developer.mozilla.org/en-US/docs/Web/CSS/named-color

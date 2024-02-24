@@ -13,9 +13,9 @@ class Plane : public Intersectable {
 
     private:
 
-        const Point origin;
-        const UnitVector<3> normal;
-        std::unique_ptr<Material> material;
+        const Point origin; /** The plane's location in the scene. */
+        const UnitVector<3> normal; /** The plane's surface normal. */
+        std::unique_ptr<Material> material; /** The plane's material. */
 
     public:
 
