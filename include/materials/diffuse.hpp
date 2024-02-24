@@ -7,6 +7,9 @@
 #include "random_utils.hpp"
 #include "ray.hpp"
 
+/**
+ * @brief A material that scatters rays randomly.
+ */
 class Diffuse : public Material {
 
     private:
@@ -18,6 +21,13 @@ class Diffuse : public Material {
         Diffuse (const Color& color);
 
         Color getColor () const;
+
+        /**
+         * @brief Generates a randomly scattered ray.
+         *
+         * @param hit
+         * @return Ray
+         */
         Ray scatter (const Hit& hit) const;
 };
 

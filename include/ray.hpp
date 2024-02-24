@@ -8,8 +8,8 @@ class Ray {
 
     public:
 
-    const Point origin;
-    const UnitVector<3> direction;
+    const Point origin; /** The ray's location in the scene. */
+    const UnitVector<3> direction; /** The ray's direction from its origin. */
 };
 
 #endif

@@ -11,12 +11,15 @@
 #include "random_utils.hpp"
 #include "ray.hpp"
 
+/**
+ * @brief A material that scatters rays by refraction.
+ */
 class Refractive : public Material {
 
     private:
 
         const Color color;
-        const double refractive_index;
+        const double refractive_index; /** The refractive index of the material. */
 
     public:
 
@@ -24,6 +27,13 @@ class Refractive : public Material {
 
         Color getColor () const;
         double getRefractiveIndex () const;
+
+        /**
+         * @brief Generates a refracted ray.
+         *
+         * @param hit
+         * @return Ray
+         */
         Ray scatter (const Hit& hit) const;
 };
 

@@ -13,9 +13,9 @@ class Sphere : public Intersectable {
 
     private:
 
-        const Point origin;
-        const double radius;
-        std::unique_ptr<Material> material;
+        const Point origin; /** The sphere's location in space. */
+        const double radius; /** The sphere's radius. */
+        std::unique_ptr<Material> material; /** The sphere's material. */
 
     public:
 
