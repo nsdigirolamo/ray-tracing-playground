@@ -14,6 +14,6 @@ long as you have a compiler that supports the C++23 language standard.
 ## Try it Yourself
 
 1. Clone the repository with `git clone https://github.com/nsdigirolamo/ray-tracing-playground.git`
-2. Change into the directory with `cd ray-tracing-playground`
+2. Navigate into the new directory with `cd ray-tracing-playground`
 3. Compile with `make`
 4. Run with `./ray-tracer`
