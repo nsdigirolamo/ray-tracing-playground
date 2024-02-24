@@ -8,8 +8,9 @@ I made about this project
 
 ## Overview
 
-This project has no external dependencies. You should be able to build it as
-long as you have a compiler that supports the C++23 language standard.
+This project includes the [doctest](https://github.com/doctest/doctest/tree/master) C++ testing framework, 
+which is released under [the MIT License](https://github.com/doctest/doctest/blob/master/LICENSE.txt). 
+Building this project requires a compiler that supports C++23.
 
 ## Try it Yourself
 
