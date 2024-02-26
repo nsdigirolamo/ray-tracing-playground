@@ -1,7 +1,6 @@
 #ifndef RAY_HPP
 #define RAY_HPP
 
-#include "primitives/unit_vector.hpp"
 #include "primitives/vector.hpp"
 
 class Ray {

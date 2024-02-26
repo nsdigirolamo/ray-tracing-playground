@@ -3,7 +3,6 @@
 
 #include <random>
 
-#include "primitives/unit_vector.hpp"
 #include "primitives/vector.hpp"
 
 /**

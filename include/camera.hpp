@@ -9,7 +9,6 @@
 
 #include "intersectables/intersectable.hpp"
 #include "primitives/color.hpp"
-#include "primitives/unit_vector.hpp"
 #include "primitives/vector.hpp"
 #include "random_utils.hpp"
 #include "ray.hpp"
