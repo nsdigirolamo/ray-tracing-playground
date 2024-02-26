@@ -11,7 +11,7 @@ std::optional<Hit> Sphere::intersects(const Ray& ray) const {
     UnitVector<3> ud = ray.direction;
     Vector<3> oc = ray.origin - this->origin;
 
-    double discriminant = pow(dot(ud, oc), 2) - (length_squared(oc) - pow(this->radius, 2));
+    double discriminant = pow(dot(ud, oc), 2) - (oc.length_squared() - pow(this->radius, 2));
 
     if (0 <= discriminant) {
 

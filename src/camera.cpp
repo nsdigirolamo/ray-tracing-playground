@@ -134,7 +134,7 @@ Camera::Camera (
         image_height,
         image_width,
         horizontal_fov,
-        length((Vector<3>)(looking_at - location)),
+        ((Vector<3>)(looking_at - location)).length(),
         looking_at
     )
 { }

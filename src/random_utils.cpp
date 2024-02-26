@@ -20,7 +20,7 @@ Vector<3> randomInUnitSphere () {
 
         point = {{x, y, z}};
 
-    } while (1 < length(point));
+    } while (1 < point.length());
 
     return point;
 }
@@ -50,7 +50,7 @@ Vector<2> randomInUnitCircle () {
 
         point = {{x, y}};
 
-    } while (1 < length(point));
+    } while (1 < point.length());
 
     return point;
 }
