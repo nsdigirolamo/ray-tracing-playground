@@ -7,9 +7,6 @@
 #include "primitives/color.hpp"
 #include "ray.hpp"
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcomma-subscript"
-
 #define CHECK_MATRIX(lhs, rhs) \
     REQUIRE(lhs.height() == rhs.height()); \
     REQUIRE(lhs.width() == rhs.width()); \
