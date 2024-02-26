@@ -188,30 +188,18 @@ TEST_SUITE ("Matrix Transform Tests") {
         {-1.0 * sin(theta), 0, cos(theta)}
     }};
 
-    Matrix<3, 1> vector {{
-        {0},
-        {0},
-        {1}
-    }};
+    Vector<3> vector {{ 0, 0, 1 }};
 
     TEST_CASE ("Identity Transformation") {
-        Matrix<3, 1> expected_vector {{
-            {0},
-            {0},
-            {1}
-        }};
-        Matrix<3, 1> actual_vector = identity_matrix.transform(vector);
-        CHECK_MATRIX(expected_vector, actual_vector);
+        Vector<3> expected_vector {{ 0, 0, 1 }};
+        Vector<3> actual_vector = identity_matrix.transform(vector);
+        CHECK_VECTOR(expected_vector, actual_vector);
     }
 
     TEST_CASE ("90 Degree Rotation Transformation") {
-        Matrix<3, 1> expected_vector = {{
-            {1},
-            {0},
-            {0}
-        }};
-        Matrix<3, 1> actual_vector = y_rotation_matrix.transform(vector);
-        CHECK_MATRIX(expected_vector, actual_vector);
+        Vector<3> expected_vector = {{ 1, 0, 0 }};
+        Vector<3> actual_vector = y_rotation_matrix.transform(vector);
+        CHECK_VECTOR(expected_vector, actual_vector);
     }
 }
 
