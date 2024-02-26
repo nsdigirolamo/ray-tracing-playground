@@ -11,21 +11,21 @@
 #pragma GCC diagnostic ignored "-Wcomma-subscript"
 
 #define CHECK_MATRIX(lhs, rhs) \
-    REQUIRE(lhs.getRows() == rhs.getRows()); \
-    REQUIRE(lhs.getCols() == rhs.getCols()); \
-    for (int row = 0; row < lhs.getRows(); ++row) { \
-        for (int col = 0; col < lhs.getCols(); ++col) { \
+    REQUIRE(lhs.height() == rhs.height()); \
+    REQUIRE(lhs.width() == rhs.width()); \
+    for (int row = 0; row < lhs.height(); ++row) { \
+        for (int col = 0; col < lhs.width(); ++col) { \
             CAPTURE(row); \
             CAPTURE(col); \
-            CHECK(lhs[row, col] == doctest::Approx(rhs[row, col])); \
+            CHECK(lhs[row][col] == doctest::Approx(rhs[row][col])); \
         } \
     }
 
 #define CHECK_VECTOR(lhs, rhs) \
-    REQUIRE(lhs.getRows() == rhs.getRows()); \
-    REQUIRE(lhs.getCols() == 1); \
-    REQUIRE(lhs.getCols() == rhs.getCols()); \
-    for (int row = 0; row < lhs.getRows(); ++ row) { \
+    REQUIRE(lhs.height() == rhs.height()); \
+    REQUIRE(lhs.width() == 1); \
+    REQUIRE(lhs.width() == rhs.width()); \
+    for (int row = 0; row < lhs.height(); ++ row) { \
         CAPTURE(row); \
         CHECK(lhs[row] == doctest::Approx(rhs[row])); \
     }

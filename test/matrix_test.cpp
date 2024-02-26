@@ -12,7 +12,7 @@ TEST_SUITE ("Matrix Construction Tests") {
 
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 3; ++col) {
-                CHECK(0.0 == doctest::Approx(actual_matrix[row, col]));
+                CHECK(0.0 == doctest::Approx(actual_matrix[row][col]));
             }
         }
     }
@@ -29,13 +29,13 @@ TEST_SUITE ("Matrix Construction Tests") {
 
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 3; ++col) {
-                CHECK(expected_values[row][col] == doctest::Approx(actual_matrix[row, col]));
+                CHECK(expected_values[row][col] == doctest::Approx(actual_matrix[row][col]));
             }
         }
 
         SUBCASE ("The array used for initialization can be changed without changing the matrix.") {
             expected_values[0][0] = 10.0;
-            CHECK_FALSE(expected_values[0][0] == doctest::Approx(actual_matrix[0, 0]));
+            CHECK_FALSE(expected_values[0][0] == doctest::Approx(actual_matrix[0][0]));
         }
     }
 
@@ -52,13 +52,13 @@ TEST_SUITE ("Matrix Construction Tests") {
 
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 3; ++col) {
-                CHECK(expected_values[row][col] == doctest::Approx(actual_matrix[row, col]));
+                CHECK(expected_values[row][col] == doctest::Approx(actual_matrix[row][col]));
             }
         }
 
         SUBCASE ("The matrix used for initialization can be changed without changing the matrix.") {
             original_matrix *= 5;
-            CHECK_FALSE(original_matrix[0,0] == doctest::Approx(actual_matrix[0,0]));
+            CHECK_FALSE(original_matrix[0][0] == doctest::Approx(actual_matrix[0][0]));
         }
     }
 }
@@ -188,7 +188,7 @@ TEST_SUITE ("Matrix Transform Tests") {
         {-1.0 * sin(theta), 0, cos(theta)}
     }};
 
-    Matrix<3,1> vector {{
+    Matrix<3, 1> vector {{
         {0},
         {0},
         {1}

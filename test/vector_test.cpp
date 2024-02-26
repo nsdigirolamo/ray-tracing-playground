@@ -42,7 +42,7 @@ TEST_SUITE ("Vector Construction Tests") {
         Vector<3> actual_vector { expected_matrix };
 
         for (int row = 0; row < 3; ++row) {
-            CHECK(expected_matrix[row, 0] == doctest::Approx(actual_vector[row]));
+            CHECK(expected_matrix[row][0] == doctest::Approx(actual_vector[row]));
         }
     }
 }
@@ -71,19 +71,19 @@ TEST_SUITE ("Vector Property Tests") {
 
     TEST_CASE ("Vector Length Squared") {
         double expected_length = 14;
-        double actual_length = length_squared(vector);
+        double actual_length = vector.length_squared();
         CHECK(expected_length == doctest::Approx(actual_length));
     }
 
     TEST_CASE ("Vector Length") {
         double expected_length = 3.74165738677;
-        double actual_length = length(vector);
+        double actual_length = vector.length();
         CHECK(expected_length == doctest::Approx(actual_length));
     }
 
     TEST_CASE ("Unit Vector") {
-        Vector<3> expected_unit = {{1.0 / length(vector), 2.0 / length(vector), 3.0 / length(vector)}};
-        Vector<3> actual_unit = unit(vector);
+        Vector<3> expected_unit = {{1.0 / vector.length(), 2.0 / vector.length(), 3.0 / vector.length()}};
+        Vector<3> actual_unit = normalize(vector);
         CHECK_VECTOR(expected_unit, actual_unit);
     }
 }
