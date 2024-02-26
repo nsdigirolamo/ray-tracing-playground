@@ -105,7 +105,7 @@ class Matrix {
 
         for (int col = 0; col < column_count; ++col) {
             Vector<row_count> temp;
-            for (int row; row < row_count; ++row) {
+            for (int row = 0; row < row_count; ++row) {
                 temp[row] = this->values[row][col];
             }
             result += vector[col] * temp;
