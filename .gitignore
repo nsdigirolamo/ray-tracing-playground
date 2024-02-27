@@ -8,6 +8,7 @@ obj
 obj/*
 # Programs
 a.out
+benching
 testing
 ray-tracer
 # Images
