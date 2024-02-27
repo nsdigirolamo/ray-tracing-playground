@@ -4,7 +4,7 @@ BDIR := bench
 IDIR := include
 ODIR := obj
 
-CXX := g++
+CXX := nvcc
 CXXFLAGS := -std=c++17 -I $(IDIR)
 
 SRCS := $(shell find $(SDIR) -name '*.cpp')
@@ -14,7 +14,7 @@ TSRCS := $(shell find $(TDIR) -name '*.cpp'; find $(SDIR) -name '*.cpp' -a \! -n
 TOBJS := $(TSRCS:$(TDIR)/%.cpp=$(ODIR)/%.o)
 TOBJS := $(TOBJS:$(SDIR)/%.cpp=$(ODIR)/%.o)
 
-BSRCS := $(shell find $(BDIR) -name '*.cpp'; find $(SDIR) -name '*.cpp' -a \! -name 'main.cpp')
+BSRCS := $(shell find $(BDIR) -name '*.cpp'; find $(BDIR) -name '*.cu'; find $(SDIR) -name '*.cpp' -a \! -name 'main.cpp')
 BOBJS := $(BSRCS:$(BDIR)/%.cpp=$(ODIR)/%.o)
 BOBJS := $(BOBJS:$(SDIR)/%.cpp=$(ODIR)/%.o)
 
