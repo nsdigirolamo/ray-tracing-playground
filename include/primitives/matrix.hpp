@@ -4,6 +4,8 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <cuda.h>
+#include <cuda_runtime.h>
 
 template <unsigned int row_count>
 class Vector;
@@ -17,12 +19,12 @@ class MatrixRow {
 
     public:
 
-    double& operator[] (const unsigned int col) {
+    __host__ __device__ double& operator[] (const unsigned int col) {
         assert(col < column_count);
         return this->columns[col];
     }
 
-    const double& operator[] (const unsigned int col) const {
+    __host__ __device__ const double& operator[] (const unsigned int col) const {
         assert(col < column_count);
         return this->columns[col];
     }
@@ -89,12 +91,12 @@ class Matrix {
         return *this;
     }
 
-    MatrixRow<column_count>& operator[] (const unsigned int row) {
+    __host__ __device__ MatrixRow<column_count>& operator[] (const unsigned int row) {
         assert(row < row_count);
         return this->values[row];
     }
 
-    const MatrixRow<column_count>& operator[] (const unsigned int row) const {
+    __host__ __device__ const MatrixRow<column_count>& operator[] (const unsigned int row) const {
         assert(row < row_count);
         return this->values[row];
     }
