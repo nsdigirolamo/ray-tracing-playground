@@ -7,7 +7,7 @@
 #include "lib/doctest/doctest.hpp"
 #include "materials/diffuse.hpp"
 #include "materials/metallic.hpp"
-#include "primitives/matrix.hpp"
+#include "primitives/matrix.cuh"
 #include "primitives/vector.hpp"
 #include "test/test_utils.hpp"
 

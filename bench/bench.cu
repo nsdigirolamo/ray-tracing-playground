@@ -5,7 +5,7 @@
 
 #include "lib/doctest/doctest.hpp"
 #include "lib/nanobench/nanobench.h"
-#include "primitives/matrix.hpp"
+#include "primitives/matrix.cuh"
 #include "random_utils.hpp"
 #include "test/test_utils.hpp"
 

@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-#include "primitives/matrix.hpp"
+#include "primitives/matrix.cuh"
 
 template <unsigned int row_count>
 class Vector : public Matrix<row_count, 1> {
