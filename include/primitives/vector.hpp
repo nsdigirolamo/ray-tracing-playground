@@ -3,37 +3,37 @@
 
 #include <cmath>
 
-#include "primitives/matrix.cuh"
+#include "primitives/matrix.hpp"
 
 template <unsigned int row_count>
 class Vector : public Matrix<row_count, 1> {
 
     public:
 
-    Vector () {
+    __host__ __device__ Vector () {
         for (int row = 0; row < row_count; ++row) {
             this->values[row][0] = 0;
         }
     }
 
-    Vector (const double (&values)[row_count]) {
+    __host__ __device__ Vector (const double (&values)[row_count]) {
         for (int row = 0; row < row_count; ++row) {
             this->values[row][0] = values[row];
         }
     }
 
-    Vector (const Matrix<row_count, 1>& matrix) {
+    __host__ __device__ Vector (const Matrix<row_count, 1>& matrix) {
         for (int row = 0; row < row_count; ++row) {
             this->values[row][0] = matrix[row][0];
         }
     }
 
-    double& operator[] (const unsigned int row) {
+    __host__ __device__ double& operator[] (const unsigned int row) {
         assert(row < row_count);
         return this->values[row][0];
     }
 
-    const double& operator[] (const unsigned int row) const {
+    __host__ __device__ const double& operator[] (const unsigned int row) const {
         assert(row < row_count);
         return this->values[row][0];
     }
