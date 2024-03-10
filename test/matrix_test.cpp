@@ -1,7 +1,7 @@
 #include <cmath>
 
 #include "lib/doctest/doctest.hpp"
-#include "primitives/matrix.cuh"
+#include "primitives/matrix.hpp"
 #include "test/test_utils.hpp"
 
 TEST_SUITE ("Matrix Construction Tests") {
