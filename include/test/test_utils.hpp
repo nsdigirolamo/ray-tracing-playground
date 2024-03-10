@@ -3,7 +3,7 @@
 
 #include "hit.hpp"
 #include "lib/doctest/doctest.hpp"
-#include "primitives/matrix.cuh"
+#include "primitives/matrix.hpp"
 #include "primitives/color.hpp"
 #include "ray.hpp"
 
