@@ -39,7 +39,7 @@ class Matrix {
 
     public:
 
-    Matrix () {
+    __host__ __device__ Matrix () {
         for (int row = 0; row < row_count; ++row) {
             for (int col = 0; col < column_count; ++col) {
                 this->values[row][col] = 0;
@@ -73,7 +73,7 @@ class Matrix {
         return *this;
     }
 
-    Matrix<row_count, column_count>& operator*= (const double rhs) {
+    __host__ __device__ Matrix<row_count, column_count>& operator*= (const double rhs) {
         for (int row = 0; row < row_count; ++row) {
             for (int col = 0; col < column_count; ++col) {
                 this->values[row][col] *= rhs;
