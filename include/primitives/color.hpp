@@ -2,7 +2,6 @@
 #define COLOR_HPP
 
 #include <cassert>
-#include <cmath>
 #include <fstream>
 #include <ostream>
 #include <vector>
@@ -26,7 +25,7 @@ class Color : public Vector<3> {
      * @param g The green attribute of the color.
      * @param b The blue attribute of the color.
      */
-    Color (const double r, const double g, const double b);
+    __host__ __device__ Color (const double r, const double g, const double b);
 
     /**
      * @brief Constructs a new Color object where the r, g, and b values are
@@ -51,7 +50,7 @@ class Color : public Vector<3> {
      *
      * @param values
      */
-    Color (const Vector<3>& v);
+    __host__ __device__ Color (const Vector<3>& v);
 
     /**
      * @brief Construct a new Color object based on the given hex color value.
