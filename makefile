@@ -1,22 +1,28 @@
 SDIR := src
 TDIR := test
-BDIR := bench
 IDIR := include
 ODIR := obj
 
 CXX := nvcc
 CXXFLAGS := -std=c++17 -I $(IDIR)
 
-SRCS := $(shell find $(SDIR) -name '*.cpp')
+SRCS := $(shell \
+			find $(SDIR) -name '*.cpp'; \
+			find $(SDIR) -name '*.cu'; \
+		)
 OBJS := $(SRCS:$(SDIR)/%.cpp=$(ODIR)/%.o)
+OBJS := $(SRCS:$(SDIR)/%.cu=$(ODIR)/%.o)
 
-TSRCS := $(shell find $(TDIR) -name '*.cpp'; find $(SDIR) -name '*.cpp' -a \! -name 'main.cpp')
+TSRCS := $(shell \
+			find $(TDIR) -name '*.cpp'; \
+			find $(TDIR) -name '*.cu'; \
+			find $(SDIR) -name '*.cpp' -a \! -name 'main.cpp'; \
+			find $(SDIR) -name '*.cu'; \
+		)
 TOBJS := $(TSRCS:$(TDIR)/%.cpp=$(ODIR)/%.o)
+TOBJS := $(TSRCS:$(TDIR)/%.cu=$(ODIR)/%.o)
 TOBJS := $(TOBJS:$(SDIR)/%.cpp=$(ODIR)/%.o)
-
-BSRCS := $(shell find $(BDIR) -name '*.cpp'; find $(BDIR) -name '*.cu'; find $(SDIR) -name '*.cpp' -a \! -name 'main.cpp')
-BOBJS := $(BSRCS:$(BDIR)/%.cpp=$(ODIR)/%.o)
-BOBJS := $(BOBJS:$(SDIR)/%.cpp=$(ODIR)/%.o)
+TOBJS := $(TOBJS:$(SDIR)/%.cu=$(ODIR)/%.o)
 
 HDRS := $(shell find $(IDIR) -name *.hpp)
 
@@ -25,19 +31,19 @@ HDRS := $(shell find $(IDIR) -name *.hpp)
 ray-tracer: $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o ray-tracer
 
-testing: $(TOBJS)
-	$(CXX) $(CXXFLAGS) $^ -o testing
-
-benching: $(BOBJS)
-	$(CXX) $(CXXFLAGS) $^ -o benching
-
 $(ODIR)/%.o: $(SDIR)/%.cpp $(HDRS) | $(ODIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(ODIR)/%.o: $(SDIR)/%.cu $(HDRS) | $(ODIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+testing: $(TOBJS)
+	$(CXX) $(CXXFLAGS) $^ -o testing
 
 $(ODIR)/%.o: $(TDIR)/%.cpp $(HDRS) | $(ODIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(ODIR)/%.o: $(BDIR)/%.cpp $(HDRS) | $(ODIR)
+$(ODIR)/%.o: $(TDIR)/%.cu $(HDRS) | $(ODIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(ODIR):
