@@ -6,44 +6,33 @@ ODIR := obj
 CXX := nvcc
 CXXFLAGS := -std=c++17 -I $(IDIR)
 
-SRCS := $(shell \
-			find $(SDIR) -name '*.cpp'; \
-			find $(SDIR) -name '*.cu'; \
-		)
-OBJS := $(SRCS:$(SDIR)/%.cpp=$(ODIR)/%.o)
-OBJS := $(SRCS:$(SDIR)/%.cu=$(ODIR)/%.o)
+SRCS := $(shell find $(SDIR) -name '*.cpp' -or -name '*.cu')
+OBJS := $(SRCS:$(SDIR)/%=$(ODIR)/%.o)
 
-TSRCS := $(shell \
-			find $(TDIR) -name '*.cpp'; \
-			find $(TDIR) -name '*.cu'; \
-			find $(SDIR) -name '*.cpp' -a \! -name 'main.cpp'; \
-			find $(SDIR) -name '*.cu'; \
-		)
-TOBJS := $(TSRCS:$(TDIR)/%.cpp=$(ODIR)/%.o)
-TOBJS := $(TSRCS:$(TDIR)/%.cu=$(ODIR)/%.o)
-TOBJS := $(TOBJS:$(SDIR)/%.cpp=$(ODIR)/%.o)
-TOBJS := $(TOBJS:$(SDIR)/%.cu=$(ODIR)/%.o)
+TSRCS := $(shell find $(TDIR) $(SDIR) \( -name '*.cpp' -and \! -name 'main.cpp' \) -or -name '*.cu')
+TOBJS := $(TSRCS:$(TDIR)/%=$(ODIR)/%.o)
+TOBJS := $(TSRCS:$(SDIR)/%=$(ODIR)/%.o)
 
-HDRS := $(shell find $(IDIR) -name *.hpp)
+HDRS := $(shell find $(IDIR) -name '*.hpp' -or -name '*.cuh')
 
 .PHONY: clean
 
-ray-tracer: $(OBJS)
+tracing: $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o ray-tracer
-
-$(ODIR)/%.o: $(SDIR)/%.cpp $(HDRS) | $(ODIR)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-$(ODIR)/%.o: $(SDIR)/%.cu $(HDRS) | $(ODIR)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 testing: $(TOBJS)
 	$(CXX) $(CXXFLAGS) $^ -o testing
 
-$(ODIR)/%.o: $(TDIR)/%.cpp $(HDRS) | $(ODIR)
+$(ODIR)/%.cpp.o: $(SDIR)/%.cpp $(HDRS) | $(ODIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(ODIR)/%.o: $(TDIR)/%.cu $(HDRS) | $(ODIR)
+$(ODIR)/%.cu.o: $(SDIR)/%.cu $(HDRS) | $(ODIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(ODIR)/%.cpp.o: $(TDIR)/%.cpp $(HDRS) | $(ODIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(ODIR)/%.cu.o: $(TDIR)/%.cu $(HDRS) | $(ODIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(ODIR):
